@@ -37,6 +37,21 @@ public class UrgeManager : MonoBehaviour
     {
         SpawnBall(Random.Range(0f, 1f) - 0.5f, Random.Range(0, Urges.Length));
     }
+    [Button]
+    public void Spawn10Balls() 
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            SpawnRandomBall();
+        }
+    }
+    public void DestroyBalls(List<Transform> _t)
+    {
+        for (int i = 0; i < _t.Count; i++)
+        {
+            Destroy(_t[i].gameObject);
+        }
+    }
     public void SpawnBall(float xPosition, int urgeIndex)
     {
         float screenSizeY = Camera.main.orthographicSize * 2;

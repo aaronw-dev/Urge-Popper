@@ -661,8 +661,8 @@ MonoBehaviour:
   - UrgeName: Yellow
     UrgeColor: {r: 1, g: 0.78932035, b: 0.1462264, a: 1}
     UrgeWeight: 3
-  - UrgeName: Red
-    UrgeColor: {r: 1, g: 0.23113209, b: 0.23113209, a: 1}
+  - UrgeName: Purple
+    UrgeColor: {r: 1, g: 0.23137254, b: 0.8852123, a: 1}
     UrgeWeight: 3
 --- !u!1 &1414645504
 GameObject:

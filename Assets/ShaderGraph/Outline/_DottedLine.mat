@@ -34,11 +34,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _height: 0.9
+    - _height: 0.3
     - _rectangle: 1
     - _speed: 1
-    - _tilling_spacing: 5
-    - _width: 0.77
+    - _tilling_spacing: 10.73
+    - _width: 0.53
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
