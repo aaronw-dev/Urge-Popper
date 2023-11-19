@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using NaughtyAttributes;
+using Redcode.Pools;
 using UnityEngine;
 
 [System.Serializable]
@@ -21,7 +22,7 @@ public class Urge
 public class UrgeManager : MonoBehaviour
 {
     public static UrgeManager Instance;
-    public GameObject ballPrefab;
+    public PoolManager _poolManager;
     public Urge[] Urges;
     private void Awake()
     {
@@ -49,7 +50,7 @@ public class UrgeManager : MonoBehaviour
     {
         for (int i = 0; i < _t.Count; i++)
         {
-            Destroy(_t[i].gameObject);
+            _poolManager.TakeToPool<Transform>("Ball", _t[i]);
         }
     }
     public void SpawnBall(float xPosition, int urgeIndex)
@@ -59,7 +60,8 @@ public class UrgeManager : MonoBehaviour
 
         xPosition = screenSizeX * xPosition;
 
-        GameObject ball = Instantiate(ballPrefab, transform);
+        GameObject ball = _poolManager.GetFromPool<Transform>("Ball").gameObject;
+        ball.transform.SetParent(transform, false);
         ball.transform.position = new Vector3(xPosition, screenSizeY / 2);
         ball.GetComponent<UrgeBody>().currentUrge = urgeIndex;
         ball.GetComponent<UrgeBody>().UpdateUrge();
