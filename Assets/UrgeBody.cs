@@ -36,7 +36,7 @@ public class UrgeBody : MonoBehaviour
         contactedObjects.Add(transform);
         contactGroups.Add(1);
         SearchContacts(contactedObjects);
-        
+
         //StartCoroutine(DestroyItems());
 
     }
@@ -44,6 +44,9 @@ public class UrgeBody : MonoBehaviour
     private void OnMouseEnter()
     {
         SolveThisBall();
+
+        if (contactedObjects.Count < 3)
+            return;
         for (int i = 0; i < contactedObjects.Count; i++)
         {
             contactedObjects[i].GetChild(0).gameObject.SetActive(true);
@@ -63,16 +66,16 @@ public class UrgeBody : MonoBehaviour
             contactedObjects[i].GetChild(0).gameObject.SetActive(false);
         }
         SolveThisBall();
-        UrgeManager.Instance.DestroyBalls(contactedObjects);
+        UrgeManager.Instance.DestroyBalls(contactedObjects, currentUrge);
     }
-    IEnumerator DestroyItems() 
+    IEnumerator DestroyItems()
     {
         int last = 0;
         for (int i = 0; i < contactGroups.Count; i++)
         {
             for (int ij = 0; ij < contactGroups[i]; ij++)
             {
-                contactedObjects[last+ ij].localScale = Vector3.zero;
+                contactedObjects[last + ij].localScale = Vector3.zero;
 
             }
             last += contactGroups[i];
@@ -83,10 +86,10 @@ public class UrgeBody : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position,triggerRadius);
+        Gizmos.DrawWireSphere(transform.position, triggerRadius);
     }
 
-    void SearchContacts(List<Transform> contacts) 
+    void SearchContacts(List<Transform> contacts)
     {
         List<Transform> newContacts = new List<Transform>();
         for (int i = 0; i < contacts.Count; i++)
@@ -109,25 +112,25 @@ public class UrgeBody : MonoBehaviour
             if (newContacts.Count > 0)
             {
                 SearchContacts(newContacts);
-                
+
             }
         }
-            if (newContacts.Count > 0)
-                contactGroups.Add(newContacts.Count);
+        if (newContacts.Count > 0)
+            contactGroups.Add(newContacts.Count);
     }
     public void UpdateUrge()
     {
         spriteRenderer.color = UrgeManager.Instance.Urges[currentUrge].UrgeColor;
         rb.mass = UrgeManager.Instance.Urges[currentUrge].UrgeWeight;
     }
-  /*  public void OnTriggerEnter2D(Collider2D collider)
-    {
-        if (collider.CompareTag("Ball"))
-            contactedObjects.Add(collider.transform);
-    }
-    public void OnTriggerExit2D(Collider2D collider)
-    {
-        if (contactedObjects.Contains(collider.transform))
-            contactedObjects.Remove(collider.transform);
-    }*/
+    /*  public void OnTriggerEnter2D(Collider2D collider)
+      {
+          if (collider.CompareTag("Ball"))
+              contactedObjects.Add(collider.transform);
+      }
+      public void OnTriggerExit2D(Collider2D collider)
+      {
+          if (contactedObjects.Contains(collider.transform))
+              contactedObjects.Remove(collider.transform);
+      }*/
 }
