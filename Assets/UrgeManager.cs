@@ -5,6 +5,7 @@ using NaughtyAttributes;
 using Redcode.Pools;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [System.Serializable]
 public class Urge
@@ -13,11 +14,13 @@ public class Urge
     public Color UrgeColor = new Color(66, 111, 255, 255);
     public float UrgeWeight;
     public int UrgeScore;
-    public Urge(string UrgeName, Color UrgeColor, float UrgeWeight)
+    public Sprite UrgeGraphic;
+    public Urge(string UrgeName, Color UrgeColor, float UrgeWeight, Sprite Graphic)
     {
         this.UrgeName = UrgeName;
         this.UrgeColor = UrgeColor;
         this.UrgeWeight = UrgeWeight;
+        this.UrgeGraphic = Graphic;
     }
 }
 
@@ -41,10 +44,18 @@ public class UrgeManager : MonoBehaviour
     {
         return Urges[index];
     }
+    public float maxX = 1;
+    private void OnDrawGizmos()
+    {
+        float screenSizeY = Camera.main.orthographicSize * 2;
+        float screenSizeX = Camera.main.aspect * screenSizeY;
+        Gizmos.color = Color.red;
+        Gizmos.DrawCube(new Vector3(0, screenSizeY / 2) , new Vector3(maxX * screenSizeX, 1));
+    }
     [Button]
     public void SpawnRandomBall()
     {
-        SpawnBall(Random.Range(0f, 1f) - 0.5f, Random.Range(0, Urges.Length));
+        SpawnBall(Random.Range(0f, maxX) - maxX/2f, Random.Range(0, Urges.Length));
     }
     [Button]
     public void Spawn10Balls()

@@ -4,8 +4,9 @@ using JetBrains.Annotations;
 using UnityEngine;
 using NaughtyAttributes;
 using Unity.VisualScripting;
+using Redcode.Pools;
 
-public class UrgeBody : MonoBehaviour
+public class UrgeBody : MonoBehaviour,IPoolObject
 {
     public int currentUrge;
     public List<Transform> contactedObjects = new List<Transform>();
@@ -21,17 +22,15 @@ public class UrgeBody : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         coll = GetComponent<Collider2D>();
+        //UpdateUrge();
+    }
+    private void OnEnable()
+    {
         UpdateUrge();
     }
     [Button]
     public void SolveThisBall()
     {
-        /*        UrgeBody[] results = UrgeManager.Instance.SolveConnectedBalls(this);
-                foreach (UrgeBody body in results)
-                {
-                    Destroy(body.gameObject);
-                    Destroy(gameObject);
-                }*/
         contactedObjects.Clear();
         contactedObjects.Add(transform);
         contactGroups.Add(1);
@@ -40,20 +39,39 @@ public class UrgeBody : MonoBehaviour
         //StartCoroutine(DestroyItems());
 
     }
-
+    private void Update()
+    {
+        if (isHovering && Time.frameCount % 5 == 0)
+            OutlineAndSolve();
+    }
+    bool isHovering;
     private void OnMouseEnter()
     {
+        isHovering = true;
+        OutlineAndSolve();
+    }
+
+    private void OutlineAndSolve()
+    {
+        for (int i = 0; i < contactedObjects.Count; i++)
+        {
+            contactedObjects[i].GetChild(0).gameObject.SetActive(false);
+        }
         SolveThisBall();
 
         if (contactedObjects.Count < 3)
-            return;
+        {           
+            return; 
+        }
         for (int i = 0; i < contactedObjects.Count; i++)
         {
             contactedObjects[i].GetChild(0).gameObject.SetActive(true);
         }
     }
+
     private void OnMouseExit()
     {
+        isHovering = false;
         for (int i = 0; i < contactedObjects.Count; i++)
         {
             contactedObjects[i].GetChild(0).gameObject.SetActive(false);
@@ -61,6 +79,7 @@ public class UrgeBody : MonoBehaviour
     }
     private void OnMouseUpAsButton()
     {
+        isHovering = false;
         for (int i = 0; i < contactedObjects.Count; i++)
         {
             contactedObjects[i].GetChild(0).gameObject.SetActive(false);
@@ -83,6 +102,7 @@ public class UrgeBody : MonoBehaviour
         }
         yield return null;
     }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
@@ -120,17 +140,30 @@ public class UrgeBody : MonoBehaviour
     }
     public void UpdateUrge()
     {
+        if (!UrgeManager.Instance)
+            return;
         spriteRenderer.color = UrgeManager.Instance.Urges[currentUrge].UrgeColor;
+        transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = UrgeManager.Instance.Urges[currentUrge].UrgeGraphic;
         rb.mass = UrgeManager.Instance.Urges[currentUrge].UrgeWeight;
     }
+
+    public void OnCreatedInPool()
+    {
+        UpdateUrge();
+    }
+
+    public void OnGettingFromPool()
+    {
+        UpdateUrge();
+    }
     /*  public void OnTriggerEnter2D(Collider2D collider)
-      {
-          if (collider.CompareTag("Ball"))
-              contactedObjects.Add(collider.transform);
-      }
-      public void OnTriggerExit2D(Collider2D collider)
-      {
-          if (contactedObjects.Contains(collider.transform))
-              contactedObjects.Remove(collider.transform);
-      }*/
+ {
+     if (collider.CompareTag("Ball"))
+         contactedObjects.Add(collider.transform);
+ }
+ public void OnTriggerExit2D(Collider2D collider)
+ {
+     if (contactedObjects.Contains(collider.transform))
+         contactedObjects.Remove(collider.transform);
+ }*/
 }
