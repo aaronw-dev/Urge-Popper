@@ -606,8 +606,8 @@ MonoBehaviour:
   _pools:
   - _name: Ball
     _component: {fileID: 6486739927593047774, guid: 95020603bfab5544fb145f9f742899d0, type: 3}
-    _count: 100
-    _container: {fileID: 714024058}
+    _count: 1000
+    _container: {fileID: 1101280886}
     _nonLazy: 1
 --- !u!4 &714024058
 Transform:
