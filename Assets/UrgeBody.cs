@@ -53,9 +53,12 @@ public class UrgeBody : MonoBehaviour,IPoolObject
 
     private void OutlineAndSolve()
     {
+        if (UrgeManager.Instance.spawningDone == false) return;
         for (int i = 0; i < contactedObjects.Count; i++)
         {
             contactedObjects[i].GetChild(0).gameObject.SetActive(false);
+            contactedObjects[i].GetChild(0).GetComponent<Renderer>().sortingOrder = 0;
+            contactedObjects[i].GetChild(1).GetComponent<Renderer>().sortingOrder = 1;
         }
         SolveThisBall();
 
@@ -66,6 +69,8 @@ public class UrgeBody : MonoBehaviour,IPoolObject
         for (int i = 0; i < contactedObjects.Count; i++)
         {
             contactedObjects[i].GetChild(0).gameObject.SetActive(true);
+            contactedObjects[i].GetChild(0).GetComponent<Renderer>().sortingOrder = 3;
+            contactedObjects[i].GetChild(1).GetComponent<Renderer>().sortingOrder = 4;
         }
     }
 
@@ -75,6 +80,8 @@ public class UrgeBody : MonoBehaviour,IPoolObject
         for (int i = 0; i < contactedObjects.Count; i++)
         {
             contactedObjects[i].GetChild(0).gameObject.SetActive(false);
+            contactedObjects[i].GetChild(0).GetComponent<Renderer>().sortingOrder = 0;
+            contactedObjects[i].GetChild(1).GetComponent<Renderer>().sortingOrder = 1;
         }
     }
     private void OnMouseUpAsButton()
@@ -83,6 +90,8 @@ public class UrgeBody : MonoBehaviour,IPoolObject
         for (int i = 0; i < contactedObjects.Count; i++)
         {
             contactedObjects[i].GetChild(0).gameObject.SetActive(false);
+            contactedObjects[i].GetChild(0).GetComponent<Renderer>().sortingOrder = 0;
+            contactedObjects[i].GetChild(1).GetComponent<Renderer>().sortingOrder = 1;
         }
         SolveThisBall();
         UrgeManager.Instance.DestroyBalls(contactedObjects, currentUrge);

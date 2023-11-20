@@ -30,11 +30,20 @@ public class UrgeManager : MonoBehaviour
     public PoolManager _poolManager;
     public Urge[] Urges;
 
+    [Header("Gameplay")]
+    public int defaultMovesToNextSpawn;
+    public int nextSpawnAmount = 10;
+    public TextMeshProUGUI movesTxt;
+    int movesLeft;
+    public bool spawningDone = true;
     private void Start()
     {
         if (Instance == null)
             Instance = this;
-    }
+        movesLeft = defaultMovesToNextSpawn;
+        movesTxt.text = movesLeft.ToString();
+        StartCoroutine(SpawnBalls(nextSpawnAmount));
+    } 
     private void Awake()
     {
         if (Instance == null)
@@ -60,15 +69,32 @@ public class UrgeManager : MonoBehaviour
     [Button]
     public void Spawn10Balls()
     {
-        for (int i = 0; i < 10; i++)
+        StartCoroutine( SpawnBalls(nextSpawnAmount));
+    }
+
+    IEnumerator SpawnBalls(int _i) 
+    {
+        spawningDone = false;
+        for (int i = 0; i < _i; i++)
         {
+            yield return new WaitForSeconds(0.1f);
             SpawnRandomBall();
         }
+        spawningDone = true;
     }
     public void DestroyBalls(List<Transform> _t, int urgeIndex)
     {
         if (_t.Count < 3)
             return;
+
+        movesLeft--;
+        if (movesLeft <= 0)
+        {
+            movesLeft = defaultMovesToNextSpawn;
+            StartCoroutine(SpawnBalls(nextSpawnAmount));
+        }
+        movesTxt.text = movesLeft.ToString();
+
         for (int i = 0; i < _t.Count; i++)
         {
             _poolManager.TakeToPool<Transform>("Ball", _t[i]);
