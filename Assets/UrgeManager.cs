@@ -54,12 +54,13 @@ public class UrgeManager : MonoBehaviour
         return Urges[index];
     }
     public float maxX = 1;
+    public float spawnYOffset = 0;
     private void OnDrawGizmos()
     {
         float screenSizeY = Camera.main.orthographicSize * 2;
         float screenSizeX = Camera.main.aspect * screenSizeY;
         Gizmos.color = Color.red;
-        Gizmos.DrawCube(new Vector3(0, screenSizeY / 2) , new Vector3(maxX * screenSizeX, 1));
+        Gizmos.DrawWireCube(new Vector3(0, (screenSizeY / 2)+ spawnYOffset) , new Vector3(maxX * screenSizeX,0.5f ));
     }
     [Button]
     public void SpawnRandomBall()
@@ -113,7 +114,7 @@ public class UrgeManager : MonoBehaviour
 
         GameObject ball = _poolManager.GetFromPool<Transform>("Ball").gameObject;
         ball.transform.SetParent(transform, false);
-        ball.transform.position = new Vector3(xPosition, screenSizeY / 2);
+        ball.transform.position = new Vector3(xPosition, (screenSizeY / 2)+ spawnYOffset);
         ball.GetComponent<UrgeBody>().currentUrge = urgeIndex;
         ball.GetComponent<UrgeBody>().UpdateUrge();
     }
