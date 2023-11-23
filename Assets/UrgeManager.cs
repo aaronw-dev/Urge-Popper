@@ -83,11 +83,8 @@ public class UrgeManager : MonoBehaviour
         }
         spawningDone = true;
     }
-    public void DestroyBalls(List<Transform> _t, int urgeIndex)
+    public void DestroyBalls(List<List<Transform>> _t, int urgeIndex)
     {
-        if (_t.Count < 3)
-            return;
-
         movesLeft--;
         if (movesLeft <= 0)
         {
@@ -96,15 +93,25 @@ public class UrgeManager : MonoBehaviour
         }
         movesTxt.text = movesLeft.ToString();
 
-        for (int i = 0; i < _t.Count; i++)
-        {
-            _poolManager.TakeToPool<Transform>("Ball", _t[i]);
-        }
+        StartCoroutine(DestroyDelay(_t));
         int urgeScore = UrgeManager.Instance.Urges[urgeIndex].UrgeScore;
         int newScore = urgeScore * _t.Count;
         ScoreManager.Instance.PublicScore += newScore;
-        Debug.Log("Added " + newScore + " score");
     }
+    IEnumerator DestroyDelay(List<List<Transform>> _t) 
+    {
+        for (int i = 0; i < _t.Count; i++)
+        {
+            for (int l = 0; l < _t[i].Count; l++)
+            {
+                _t[i][l].GetComponent<UrgeBody>().DestroyFeedback?.PlayFeedbacks();
+            }
+            yield return new WaitForSeconds(0.1f);
+        }
+        
+
+    }
+    int ballIndex = 1;
     public void SpawnBall(float xPosition, int urgeIndex)
     {
         float screenSizeY = Camera.main.orthographicSize * 2;
@@ -113,6 +120,8 @@ public class UrgeManager : MonoBehaviour
         xPosition = screenSizeX * xPosition;
 
         GameObject ball = _poolManager.GetFromPool<Transform>("Ball").gameObject;
+        ball.name += ballIndex;
+        ballIndex++;
         ball.transform.SetParent(transform, false);
         ball.transform.position = new Vector3(xPosition, (screenSizeY / 2)+ spawnYOffset);
         ball.GetComponent<UrgeBody>().currentUrge = urgeIndex;
