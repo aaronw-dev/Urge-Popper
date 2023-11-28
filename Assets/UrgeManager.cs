@@ -120,7 +120,7 @@ public class UrgeManager : MonoBehaviour
         xPosition = screenSizeX * xPosition;
 
         GameObject ball = _poolManager.GetFromPool<Transform>("Ball").gameObject;
-        ball.name += ballIndex;
+        ball.name = "ball" + ballIndex;
         ballIndex++;
         ball.transform.SetParent(transform, false);
         ball.transform.position = new Vector3(xPosition, (screenSizeY / 2)+ spawnYOffset);

@@ -214,6 +214,7 @@ public class UrgeBody : MonoBehaviour,IPoolObject
     }
     public void TakePool() 
     {
+        transform.GetChild(1).localScale = Vector3.one * 0.2640481f;
         UrgeManager.Instance._poolManager.TakeToPool<Transform>("Ball", transform);
     }
     public void UpdateUrge()
