@@ -6,7 +6,7 @@ using NaughtyAttributes;
 using Unity.VisualScripting;
 using Redcode.Pools;
 
-public class UrgeBody : MonoBehaviour,IPoolObject
+public class UrgeBody : MonoBehaviour, IPoolObject
 {
     public int currentUrge;
     public List<Transform> contactedObjects = new List<Transform>();
@@ -15,6 +15,7 @@ public class UrgeBody : MonoBehaviour,IPoolObject
     Collider2D coll;
     public float triggerRadius = 1.5f;
     public List<int> contactGroups = new List<int>();
+    public bool hasPassedInJars;
 
 
     void Awake()
@@ -63,8 +64,8 @@ public class UrgeBody : MonoBehaviour,IPoolObject
         SolveThisBall();
 
         if (contactedObjects.Count < 3)
-        {           
-            return; 
+        {
+            return;
         }
         for (int i = 0; i < contactedObjects.Count; i++)
         {
