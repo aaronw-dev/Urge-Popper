@@ -5,6 +5,8 @@ using UnityEngine;
 using NaughtyAttributes;
 using Unity.VisualScripting;
 using Redcode.Pools;
+using MoreMountains.Feedbacks;
+using System.Linq;
 
 public class UrgeBody : MonoBehaviour, IPoolObject
 {
@@ -17,7 +19,8 @@ public class UrgeBody : MonoBehaviour, IPoolObject
     public List<int> contactGroups = new List<int>();
     public bool hasPassedInJars;
 
-
+    [Header("Feedback")]
+    public MMFeedbacks DestroyFeedback;
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -34,11 +37,51 @@ public class UrgeBody : MonoBehaviour, IPoolObject
     {
         contactedObjects.Clear();
         contactedObjects.Add(transform);
-        contactGroups.Add(1);
+        _nodes.Clear();
+        _hierachyNodes.Clear();
+        hierarchyList.Clear();
         SearchContacts(contactedObjects);
+       
+    }
 
-        //StartCoroutine(DestroyItems());
+    public List<List<Transform>> hierarchyList = new List<List<Transform>>();
+    void BuildHierarchy()
+    {
+        foreach (Node node in _nodes)
+        {
+            int index = -1;
+            List<Transform> myList = hierarchyList.Find(x => x.Contains(node.parentNode));
+            if ( myList != null  && myList.Count>0) 
+            {
+                index = hierarchyList.IndexOf(myList);
+            }
+            else
+            {
+                List<Transform> newList = new List<Transform>
+                {
+                    node.parentNode
+                };
+                hierarchyList.Add(newList);
+                index = hierarchyList.Count - 1;
+            }
 
+            if(index+1 >= hierarchyList.Count || hierarchyList.Count == 0) 
+            {
+                List<Transform> newList = new List<Transform>();
+                newList.AddRange(node.childrenNode);
+                hierarchyList.Add(newList);
+            }
+            else 
+            {
+                for (int i = 0; i < node.childrenNode.Count; i++)
+                {
+                    if (!hierarchyList[index+1].Contains(node.childrenNode[i]))
+                    {
+                        hierarchyList[index+1].Add(node.childrenNode[i]);
+                    }
+                }
+            }
+        }
     }
     private void Update()
     {
@@ -95,7 +138,15 @@ public class UrgeBody : MonoBehaviour, IPoolObject
             contactedObjects[i].GetChild(1).GetComponent<Renderer>().sortingOrder = 1;
         }
         SolveThisBall();
-        UrgeManager.Instance.DestroyBalls(contactedObjects, currentUrge);
+        if (contactedObjects.Count < 3)
+            return;
+        BuildHierarchy();
+        for (int i = 0; i < hierarchyList.Count; i++)
+        {
+            _hierachyNodes.Add(new Node(null, hierarchyList[i]));
+        }
+
+        UrgeManager.Instance.DestroyBalls(hierarchyList, currentUrge);
     }
     IEnumerator DestroyItems()
     {
@@ -119,20 +170,34 @@ public class UrgeBody : MonoBehaviour, IPoolObject
         Gizmos.DrawWireSphere(transform.position, triggerRadius);
     }
 
+    [System.Serializable]
+    public class Node 
+    {
+        public Transform parentNode;
+        public List<Transform> childrenNode = new List<Transform>();
+
+        public Node(Transform _t, List<Transform> _c)
+        {
+            parentNode = _t;
+            childrenNode = _c;
+        }
+    }
+   public List<Node> _nodes = new List<Node>();
+   public  List<Node> _hierachyNodes = new List<Node>();
     void SearchContacts(List<Transform> contacts)
     {
-        List<Transform> newContacts = new List<Transform>();
         for (int i = 0; i < contacts.Count; i++)
         {
+            List<Transform> newContacts = new List<Transform>();
             Transform contact = contacts[i];
             Collider2D[] hitResults = Physics2D.OverlapCircleAll(contact.position, triggerRadius);
 
             for (int j = 0; j < hitResults.Length; j++)
             {
                 Collider2D collider = hitResults[j];
-                if (collider.CompareTag("Ball") && collider.GetComponent<UrgeBody>().currentUrge == currentUrge)
+                if (collider.CompareTag("Ball") && collider.GetComponent<UrgeBody>().currentUrge == currentUrge && collider.gameObject!= contact.gameObject)
                 {
-                    if (!contactedObjects.Contains(collider.transform) && !newContacts.Contains(collider.transform) && !contacts.Contains(collider.transform))
+                    if (!contactedObjects.Contains(collider.transform) && !newContacts.Contains(collider.transform) && !contacts.Contains(collider.transform) )
                     {
                         contactedObjects.Add(collider.transform);
                         newContacts.Add(collider.transform);
@@ -141,17 +206,23 @@ public class UrgeBody : MonoBehaviour, IPoolObject
             }
             if (newContacts.Count > 0)
             {
+                Node n = new Node(contact, newContacts);
+                _nodes.Add(n);
                 SearchContacts(newContacts);
-
             }
         }
-        if (newContacts.Count > 0)
-            contactGroups.Add(newContacts.Count);
+      
+    }
+    public void TakePool() 
+    {
+        transform.GetChild(1).localScale = Vector3.one * 0.2640481f;
+        UrgeManager.Instance._poolManager.TakeToPool<Transform>("Ball", transform);
     }
     public void UpdateUrge()
     {
         if (!UrgeManager.Instance)
             return;
+        transform.GetChild(1).gameObject.SetActive(true);
         spriteRenderer.color = UrgeManager.Instance.Urges[currentUrge].UrgeColor;
         transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = UrgeManager.Instance.Urges[currentUrge].UrgeGraphic;
         rb.mass = UrgeManager.Instance.Urges[currentUrge].UrgeWeight;
