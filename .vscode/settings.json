@@ -51,5 +51,8 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Saiku Clone.sln"
+    "dotnet.defaultSolution": "Saiku Clone.sln",
+    "cSpell.words": [
+        "Metaball"
+    ]
 }
