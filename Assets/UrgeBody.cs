@@ -19,15 +19,17 @@ public class UrgeBody : MonoBehaviour, IPoolObject
     public float triggerRadius = 1.5f;
     public List<int> contactGroups = new List<int>();
     public bool hasPassedInJars;
-
+    public bool isBomb;
     [Header("Feedback")]
     public UnityEvent OnBeginDestroy;
     public MMFeedbacks DestroyFeedback;
+    float initGraphicScale;
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         coll = GetComponent<Collider2D>();
+        initGraphicScale = transform.GetChild(1).localScale.x;
         //UpdateUrge();
     }
     
@@ -43,7 +45,8 @@ public class UrgeBody : MonoBehaviour, IPoolObject
         _nodes.Clear();
         _hierachyNodes.Clear();
         hierarchyList.Clear();
-        SearchContacts(contactedObjects);
+        List<Transform> newcontactedObjects = new List<Transform>() {transform};
+        SearchContacts(newcontactedObjects);
        
     }
 
@@ -108,17 +111,21 @@ public class UrgeBody : MonoBehaviour, IPoolObject
             contactedObjects[i].GetChild(0).GetComponent<Renderer>().sortingOrder = 0;
             contactedObjects[i].GetChild(1).GetComponent<Renderer>().sortingOrder = 1;
         }
+        
         SolveThisBall();
 
-        if (contactedObjects.Count < 3)
+        if (gameObject.layer == LayerMask.NameToLayer("ToBeDestroyed"))
+            return;
+
+        if (contactedObjects.Count < 3 && !isBomb)
         {
             return;
         }
         for (int i = 0; i < contactedObjects.Count; i++)
         {
             contactedObjects[i].GetChild(0).gameObject.SetActive(true);
-            contactedObjects[i].GetChild(0).GetComponent<Renderer>().sortingOrder = 3;
-            contactedObjects[i].GetChild(1).GetComponent<Renderer>().sortingOrder = 4;
+            contactedObjects[i].GetChild(0).GetComponent<Renderer>().sortingOrder = 3 + (contactedObjects[i].GetComponent<UrgeBody>().isBomb ? 1 : 0);
+            contactedObjects[i].GetChild(1).GetComponent<Renderer>().sortingOrder = 4 + (contactedObjects[i].GetComponent<UrgeBody>().isBomb ? 1 :0);
         }
     }
 
@@ -145,8 +152,13 @@ public class UrgeBody : MonoBehaviour, IPoolObject
         }
         SolveThisBall();
         OnBeginDestroy?.Invoke();
-        if (contactedObjects.Count < 3)
+        if (contactedObjects.Count < 3 && !isBomb)
             return;
+        for (int i = 0; i < contactedObjects.Count; i++)
+        {
+            contactedObjects[i].gameObject.layer = LayerMask.NameToLayer("ToBeDestroyed");
+                
+        }
         BuildHierarchy();
         for (int i = 0; i < hierarchyList.Count; i++)
         {
@@ -196,40 +208,57 @@ public class UrgeBody : MonoBehaviour, IPoolObject
         for (int i = 0; i < contacts.Count; i++)
         {
             List<Transform> newContacts = new List<Transform>();
+            List<Transform> BombContacts = new List<Transform>();
             Transform contact = contacts[i];
             Collider2D[] hitResults = Physics2D.OverlapCircleAll(contact.position, triggerRadius);
-
             for (int j = 0; j < hitResults.Length; j++)
             {
                 Collider2D collider = hitResults[j];
-                if (collider.CompareTag("Ball") && collider.GetComponent<UrgeBody>().currentUrge == currentUrge && collider.gameObject!= contact.gameObject)
+
+                if (collider.CompareTag("Ball") && collider.gameObject != contact.gameObject)
                 {
-                    if (!contactedObjects.Contains(collider.transform) && !newContacts.Contains(collider.transform) && !contacts.Contains(collider.transform) )
+                    if (!contactedObjects.Contains(collider.transform) && !newContacts.Contains(collider.transform) && !contacts.Contains(collider.transform))
                     {
-                        contactedObjects.Add(collider.transform);
-                        newContacts.Add(collider.transform);
+
+                        if (collider.GetComponent<UrgeBody>().currentUrge == currentUrge || isBomb)
+                        {
+                            contactedObjects.Add(collider.transform);
+                            newContacts.Add(collider.transform);
+                            if(isBomb && collider.GetComponent<UrgeBody>().currentUrge == currentUrge) 
+                            {
+                                BombContacts.Add(collider.transform);
+                            }
+                        }
+                        
                     }
                 }
+                
             }
-            if (newContacts.Count > 0)
+            if (newContacts.Count > 0 || isBomb)
             {
+                
                 Node n = new Node(contact, newContacts);
                 _nodes.Add(n);
-                SearchContacts(newContacts);
+                if (!isBomb && newContacts.Count > 0)
+                    SearchContacts(newContacts);
+                else if (isBomb && BombContacts.Count > 0)
+                    SearchContacts(BombContacts);
+
             }
         }
       
     }
-    public void TakePool() 
+    public void TakePool(string b = "Ball") 
     {
-        transform.GetChild(1).localScale = Vector3.one * 0.2640481f;
-        UrgeManager.Instance._poolManager.TakeToPool<Transform>("Ball", transform);
+        transform.GetChild(1).localScale = Vector3.one * initGraphicScale;
+        UrgeManager.Instance._poolManager.TakeToPool<Transform>(b, transform);
     }
     public void UpdateUrge()
     {
-        if (!UrgeManager.Instance)
-            return;
         transform.GetChild(1).gameObject.SetActive(true);
+        if (!UrgeManager.Instance||isBomb)
+            return;
+        
         spriteRenderer.color = UrgeManager.Instance.Urges[currentUrge].UrgeColor;
         transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = UrgeManager.Instance.Urges[currentUrge].UrgeGraphic;
         rb.mass = UrgeManager.Instance.Urges[currentUrge].UrgeWeight;

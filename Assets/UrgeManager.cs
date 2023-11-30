@@ -101,15 +101,21 @@ public class UrgeManager : MonoBehaviour
         movesLeft--;
         if (movesLeft <= 0)
         {
-            movesLeft = defaultMovesToNextSpawn;
+            Timer.Register(1f, () =>
+            {
+                movesLeft = defaultMovesToNextSpawn;
+                movesTxt.text = movesLeft.ToString();
+            });
             StartCoroutine(SpawnBalls(nextSpawnAmount));
         }
         movesTxt.text = movesLeft.ToString();
-
         StartCoroutine(DestroyDelay(_t, count));
-        int urgeScore = UrgeManager.Instance.Urges[urgeIndex].UrgeScore;
-        int newScore = urgeScore * _t.Count;
-        ScoreManager.Instance.PublicScore += newScore;
+        if (urgeIndex > 0)
+        {
+            int urgeScore = UrgeManager.Instance.Urges[urgeIndex].UrgeScore;
+            int newScore = urgeScore * count;
+            ScoreManager.Instance.PublicScore += newScore;
+        }
     }
     IEnumerator DestroyDelay(List<List<Transform>> _t, int c) 
     {
@@ -118,8 +124,14 @@ public class UrgeManager : MonoBehaviour
             for (int l = 0; l < _t[i].Count; l++)
             {
                 _t[i][l].GetComponent<UrgeBody>().DestroyFeedback?.PlayFeedbacks();
+                if (c >= 5 && i == 0 && l == 0 && !_t[i][l].GetComponent<UrgeBody>().isBomb)
+                {
+                    Vector3 pos = _t[i][l].position;
+                  Timer.Register(0.7f,()=> _poolManager.GetFromPool<Transform>("Bomb").transform.position =pos);
+                }
             }
             yield return new WaitForSeconds(0.1f);
+
         }
         for (int l = 0; l < comboPhrases.Length; l++)
         {

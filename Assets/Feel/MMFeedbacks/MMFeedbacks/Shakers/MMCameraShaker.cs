@@ -100,6 +100,7 @@ namespace MoreMountains.Feedbacks
 		/// a cooldown, in seconds, after a shake, during which no other shake can start
 		[Tooltip("a cooldown, in seconds, after a shake, during which no other shake can start")]
 		public float CooldownBetweenShakes = 0f;
+		public bool overrideShake;
 	    
 		protected MMWiggle _wiggle;
 		protected float _shakeStartedTimestamp = -Single.MaxValue;
@@ -159,6 +160,14 @@ namespace MoreMountains.Feedbacks
 			if (!MMChannel.Match(channelData, ChannelMode, Channel, MMChannelDefinition))
 			{
 				return;
+			}
+			if (overrideShake) 
+			{
+				if(_wiggle.PositionWiggleProperties.LimitedTimeTotal != 2) 
+				{
+					if (duration < _wiggle.PositionWiggleProperties.LimitedTimeTotal && _wiggle.PositionWiggleProperties.LimitedTimeLeft >0)
+						return;
+				}
 			}
 			this.ShakeCamera (duration, amplitude, frequency, amplitudeX, amplitudeY, amplitudeZ, useUnscaledTime);
 		}
