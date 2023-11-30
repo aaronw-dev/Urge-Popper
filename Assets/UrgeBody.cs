@@ -7,6 +7,7 @@ using Unity.VisualScripting;
 using Redcode.Pools;
 using MoreMountains.Feedbacks;
 using System.Linq;
+using UnityEngine.Events;
 
 public class UrgeBody : MonoBehaviour,IPoolObject
 {
@@ -19,6 +20,7 @@ public class UrgeBody : MonoBehaviour,IPoolObject
     public List<int> contactGroups = new List<int>();
 
     [Header("Feedback")]
+    public UnityEvent OnBeginDestroy;
     public MMFeedbacks DestroyFeedback;
     void Awake()
     {
@@ -27,6 +29,7 @@ public class UrgeBody : MonoBehaviour,IPoolObject
         coll = GetComponent<Collider2D>();
         //UpdateUrge();
     }
+    
     private void OnEnable()
     {
         UpdateUrge();
@@ -90,10 +93,11 @@ public class UrgeBody : MonoBehaviour,IPoolObject
     bool isHovering;
     private void OnMouseEnter()
     {
+        OnBeginDestroy?.Invoke();
         isHovering = true;
         OutlineAndSolve();
     }
-
+    public void Hover(bool b) => isHovering = b;
     private void OutlineAndSolve()
     {
         if (UrgeManager.Instance.spawningDone == false) return;
@@ -117,9 +121,11 @@ public class UrgeBody : MonoBehaviour,IPoolObject
         }
     }
 
+
     private void OnMouseExit()
     {
         isHovering = false;
+        OnBeginDestroy?.Invoke();
         for (int i = 0; i < contactedObjects.Count; i++)
         {
             contactedObjects[i].GetChild(0).gameObject.SetActive(false);
@@ -137,6 +143,7 @@ public class UrgeBody : MonoBehaviour,IPoolObject
             contactedObjects[i].GetChild(1).GetComponent<Renderer>().sortingOrder = 1;
         }
         SolveThisBall();
+        OnBeginDestroy?.Invoke();
         if (contactedObjects.Count < 3)
             return;
         BuildHierarchy();
@@ -145,7 +152,7 @@ public class UrgeBody : MonoBehaviour,IPoolObject
             _hierachyNodes.Add(new Node(null, hierarchyList[i]));
         }
 
-        UrgeManager.Instance.DestroyBalls(hierarchyList, currentUrge);
+        UrgeManager.Instance.DestroyBalls(hierarchyList, currentUrge, contactedObjects.Count);
     }
     IEnumerator DestroyItems()
     {

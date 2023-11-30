@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 13299914}
   - component: {fileID: 13299916}
   - component: {fileID: 13299917}
+  - component: {fileID: 13299918}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -157,13 +158,14 @@ RectTransform:
   m_Children:
   - {fileID: 1379761442}
   - {fileID: 1767172993}
+  - {fileID: 529354116}
   m_Father: {fileID: 1280907499}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 541.9, y: 100}
+  m_SizeDelta: {x: 632.654, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &13299914
 MonoBehaviour:
@@ -185,7 +187,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Exceptional showstopping finesse!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4eccd51250cfa3948a3ac1e21d15fe34, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 183051d3d39b2f4438c17e8ba8958555, type: 2}
@@ -212,8 +214,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 85.7
-  m_fontSizeBase: 85.7
+  m_fontSize: 83
+  m_fontSizeBase: 83
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -224,7 +226,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: -35.41
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -314,6 +316,19 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   TargetedPlatform: 0
+--- !u!114 &13299918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 13299911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShowMaskGraphic: 1
 --- !u!1 &46816160
 GameObject:
   m_ObjectHideFlags: 0
@@ -2083,6 +2098,117 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ae20bf964378e4043849904011e5f4a4, type: 3}
+--- !u!1 &529354115
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 529354116}
+  - component: {fileID: 529354119}
+  - component: {fileID: 529354118}
+  - component: {fileID: 529354117}
+  m_Layer: 5
+  m_Name: Shine
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &529354116
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 529354115}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 13299912}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 5.8, y: 0}
+  m_SizeDelta: {x: 621.05, y: 224.167}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &529354117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 529354115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f19b7e2285c104f6ca47d583f3e5444f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 300
+  m_EffectMaterial: {fileID: 2100000, guid: 9dc7e810a87b444ab96919f3215c2fe5, type: 2}
+  m_EffectFactor: 0
+  m_Width: 0.17
+  m_Rotation: 48
+  m_Softness: 0.805
+  m_Brightness: 1
+  m_Gloss: 1
+  m_OnlyShine: 1
+  m_EffectArea: 0
+  m_Player:
+    play: 1
+    initialPlayDelay: 0
+    duration: 1
+    loop: 1
+    loopDelay: 0
+    updateMode: 0
+  m_Play: 0
+  m_Loop: 0
+  m_Duration: 1
+  m_LoopDelay: 1
+  m_UpdateMode: 0
+--- !u!114 &529354118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 529354115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 0.9420621, b: 0, a: 0.6509804}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: a61ad81115bbc78438e554a7299d18ee, type: 3}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &529354119
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 529354115}
+  m_CullTransparentMesh: 1
 --- !u!1 &607439461
 GameObject:
   m_ObjectHideFlags: 0
@@ -2907,6 +3033,52 @@ MonoBehaviour:
   nextSpawnAmount: 25
   movesTxt: {fileID: 258786465}
   spawningDone: 1
+  comboPhrases:
+  - comboAmount: 5
+    phrases:
+    - 5 star no fap
+    - Nice!
+    - Good Job
+    - Sensational willpower
+    - Majestic
+  - comboAmount: 6
+    phrases:
+    - Unstoppable
+    - No Fap genius
+    - Incredile finesse
+    - Mesmerizing
+    - 'Supreme '
+  - comboAmount: 7
+    phrases:
+    - Sevenfold
+    - 'Prodigy '
+    - Exceptional
+    - Flawless
+    - Genius
+  - comboAmount: 8
+    phrases:
+    - Unstoppable
+    - Is this magic??
+    - Breathtaking
+    - Captivating
+    - Genius
+    - Masterstroke
+    - Showstopper
+    - Spectacle of greatness
+    - Legend???
+    - 'Unmatched brilliance '
+    - divine levels!
+    - Captivating virtuosity!
+    - Exceptional showstopping finesse!
+    - Spectacle of transcendence
+    - Mastery beyond imagination
+    - force to be reckoned with
+    - Legendary wizardry!
+    - Sensational display!
+    - Impressive willpower
+    - Mind-blowing commitment
+    - unwavering spirit
+    - ' true hero!'
   maxX: 0.23
   spawnYOffset: 3.94
 --- !u!4 &1120390028 stripped
@@ -3129,6 +3301,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1280907499}
+  - component: {fileID: 1280907502}
   m_Layer: 5
   m_Name: ComboText Holder
   m_TagString: Untagged
@@ -3154,9 +3327,17 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 123}
   m_SizeDelta: {x: 541.8979, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &1280907502
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1280907498}
+  m_CullTransparentMesh: 1
 --- !u!1 &1306312581
 GameObject:
   m_ObjectHideFlags: 0
@@ -3232,7 +3413,7 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: -0.5, y: 0, z: 0}
-  - {x: 0.5, y: 0, z: 1}
+  - {x: 0.5, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.15192579
@@ -3482,7 +3663,7 @@ MonoBehaviour:
   Data:
     Duration: 0
     Target: {fileID: 13299912}
-    Value: {x: 0, y: 0, z: 1}
+    Value: {x: 0, y: 0.75, z: 1}
     Ease: 0
 --- !u!1001 &1413788788
 PrefabInstance:
@@ -3550,6 +3731,14 @@ PrefabInstance:
     - target: {fileID: 6486739927593047774, guid: 95020603bfab5544fb145f9f742899d0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7442599703604423742, guid: 95020603bfab5544fb145f9f742899d0, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.a
+      value: 0.007843138
+      objectReference: {fileID: 0}
+    - target: {fileID: 7442599703604423742, guid: 95020603bfab5544fb145f9f742899d0, type: 3}
+      propertyPath: InitialModule.startColor.minColor.a
+      value: 0.0627451
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 95020603bfab5544fb145f9f742899d0, type: 3}
@@ -4450,6 +4639,8 @@ GameObject:
   - component: {fileID: 1767172999}
   - component: {fileID: 1767172998}
   - component: {fileID: 1767172994}
+  - component: {fileID: 1767173002}
+  - component: {fileID: 1767173001}
   m_Layer: 5
   m_Name: Tween In Event
   m_TagString: Untagged
@@ -4511,7 +4702,7 @@ MonoBehaviour:
   Data:
     Duration: 1.05
     Target: {fileID: 13299912}
-    Value: 242
+    Value: 200
     Ease: 1600
 --- !u!114 &1767172996
 MonoBehaviour:
@@ -4584,6 +4775,47 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Data:
     Duration: 0.1
+--- !u!114 &1767173001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767172992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1955a79d82398b646945792cb210ac21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Data:
+    Duration: 0.1
+    Event:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1101280887}
+          m_TargetAssemblyTypeName: UrgeManager, Assembly-CSharp
+          m_MethodName: TakeComboTextPool
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 13299914}
+            m_ObjectArgumentAssemblyTypeName: TMPro.TextMeshProUGUI, Unity.TextMeshPro
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &1767173002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767172992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e827904b3dee129429b801767788c28a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1782889018
 GameObject:
   m_ObjectHideFlags: 0

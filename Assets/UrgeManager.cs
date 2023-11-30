@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using MoreMountains.Tools;
 using NaughtyAttributes;
 using Redcode.Pools;
 using TMPro;
@@ -24,6 +25,16 @@ public class Urge
     }
 }
 
+
+[System.Serializable]
+public class ComboCelebText 
+{
+    public int comboAmount = 3;
+    public string[] phrases;
+}
+
+
+
 public class UrgeManager : MonoBehaviour
 {
     public static UrgeManager Instance;
@@ -36,6 +47,8 @@ public class UrgeManager : MonoBehaviour
     public TextMeshProUGUI movesTxt;
     int movesLeft;
     public bool spawningDone = true;
+    [Header("Combo Phrases")]
+    public ComboCelebText[] comboPhrases;
     private void Start()
     {
         if (Instance == null)
@@ -83,7 +96,7 @@ public class UrgeManager : MonoBehaviour
         }
         spawningDone = true;
     }
-    public void DestroyBalls(List<List<Transform>> _t, int urgeIndex)
+    public void DestroyBalls(List<List<Transform>> _t, int urgeIndex, int count)
     {
         movesLeft--;
         if (movesLeft <= 0)
@@ -93,12 +106,12 @@ public class UrgeManager : MonoBehaviour
         }
         movesTxt.text = movesLeft.ToString();
 
-        StartCoroutine(DestroyDelay(_t));
+        StartCoroutine(DestroyDelay(_t, count));
         int urgeScore = UrgeManager.Instance.Urges[urgeIndex].UrgeScore;
         int newScore = urgeScore * _t.Count;
         ScoreManager.Instance.PublicScore += newScore;
     }
-    IEnumerator DestroyDelay(List<List<Transform>> _t) 
+    IEnumerator DestroyDelay(List<List<Transform>> _t, int c) 
     {
         for (int i = 0; i < _t.Count; i++)
         {
@@ -108,10 +121,26 @@ public class UrgeManager : MonoBehaviour
             }
             yield return new WaitForSeconds(0.1f);
         }
-        
+        for (int l = 0; l < comboPhrases.Length; l++)
+        {
+            if (comboPhrases[l].comboAmount == c) 
+            {
+                _poolManager.GetFromPool<TextMeshProUGUI>("ComboText").text = comboPhrases[l].phrases.MMRandomValue();
+                break;
+            }
+            else if(l == comboPhrases.Length-1 && c > comboPhrases[l].comboAmount) 
+            {
+                _poolManager.GetFromPool<TextMeshProUGUI>("ComboText").text = comboPhrases[l].phrases.MMRandomValue();
+                break;
+            }
+        } 
 
     }
     int ballIndex = 1;
+    public void TakeComboTextPool(TextMeshProUGUI _t)
+    {
+        _poolManager.TakeToPool<TextMeshProUGUI>("ComboText", _t);
+    }
     public void SpawnBall(float xPosition, int urgeIndex)
     {
         float screenSizeY = Camera.main.orthographicSize * 2;
