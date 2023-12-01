@@ -4,6 +4,7 @@ using TMPro;
 using UnityEditor.ShaderGraph.Serialization;
 using UnityEngine;
 using UnityEngine.Networking;
+using DG.Tweening;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class ScoreManager : MonoBehaviour
     string apiUrl = "https://big-balls-leaderboard.aw-dev.repl.co/uploadscore";
     string IDUrl = "https://big-balls-leaderboard.aw-dev.repl.co/getid";
     public string apiid = "";
+    int scoreCounter = 0;
+    Coroutine scoreRoutine;
     public int PublicScore
     {
         get
@@ -22,13 +25,26 @@ public class ScoreManager : MonoBehaviour
         set
         {
             score = value;
-            scoreText.text = score.ToString();
+            if(scoreRoutine != null)
+                StopCoroutine(scoreRoutine);
+            scoreRoutine = startCoroutine(ScoreCounter());
         }
     }
     void Awake()
     {
         Instance = this;
         StartCoroutine(GetIdentification());
+    }
+    IEnumerator  ScoreCounter()
+    {
+        while (scoreCounter < score)
+        {
+            scoreCounter += 50;
+            sc
+            scoreText.text = scoreCounter.ToString();
+            yield return new WaitForSeconds(0.03f);
+        }
+        scoreRoutine = null;
     }
 
     public void GameEnd()
