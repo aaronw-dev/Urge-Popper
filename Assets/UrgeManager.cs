@@ -110,12 +110,19 @@ public class UrgeManager : MonoBehaviour
         }
         movesTxt.text = movesLeft.ToString();
         StartCoroutine(DestroyDelay(_t, count));
+         int urgeScore = 0;
         if (urgeIndex > 0)
         {
-            int urgeScore = UrgeManager.Instance.Urges[urgeIndex].UrgeScore;
-            int newScore = urgeScore * count;
-            ScoreManager.Instance.PublicScore += newScore;
+            urgeScore = UrgeManager.Instance.Urges[urgeIndex].UrgeScore;
         }
+        else
+        {
+            //Fix this properly later
+            urgeScore = UrgeManager.Instance.Urges[0].UrgeScore;
+        }
+        int newScore = urgeScore * count;
+        ScoreManager.Instance.PublicScore += newScore;
+
     }
     IEnumerator DestroyDelay(List<List<Transform>> _t, int c) 
     {
