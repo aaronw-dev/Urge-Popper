@@ -25,17 +25,34 @@ public class SoundEffectSO : ScriptableObject
     [MinMaxSlider(0, 4)]
     public Vector2 pitch = new Vector2(1, 1);
     [Space]
-    [BoxGroup("config")]
+    [BoxGroup("config"),HideIf("isOneClip"),Label("Clips Play Order")]
     [SerializeField] private SoundClipPlayOrder playOrder;
+
+    [SerializeField]
+    [BoxGroup("config"), ShowIf("isOneClip")]
+    private bool pitchShift= false;
+    [SerializeField]
+    [BoxGroup("config"), ShowIf("isPitchShift")]
+    private float pitchShiftValue = 0.1f;
+    
+    [SerializeField]
+    [BoxGroup("config"), ShowIf("isPitchShift"),Label("Cooldown After Seconds")]
+    private float pitchShiftCooldown = 1f;
     [BoxGroup("config")]
     [SerializeField] private AudioMixerGroup audioMixer;
+
+    
 
     //  [DisplayAsString] [BoxGroup("config")] [SerializeField]
     [SerializeField, ReadOnly] private int playIndex = 0;
     Timer playIndexResetTimer;
     AudioSource playSource;
+
     #endregion
 
+
+    bool isOneClip => clip != null || clips.Length == 0;
+    bool isPitchShift => pitchShift && isOneClip;
     #region PreviewCode
 
 #if UNITY_EDITOR
@@ -65,6 +82,11 @@ public class SoundEffectSO : ScriptableObject
     [Button("Stop")]
     private void StopPreview()
     {
+        playIndex = 0;
+        if(isPitchShift)
+        {
+            pitch.y = pitch.x + (pitchShiftValue * playIndex);
+        }
         previewer.Stop();
     }
 #endif
@@ -94,9 +116,21 @@ public class SoundEffectSO : ScriptableObject
             source.outputAudioMixerGroup = audioMixer;
         // set source config:
         source.clip = clips.Length > 0 ? GetAudioClip() : actualclip;
+        if(pitchShift)
+        {
+            playIndex = (playIndex + 1);
+            source.pitch = pitch.x + (pitchShiftValue * playIndex);
+            pitch.y = pitch.x + (pitchShiftValue * playIndex);
+            
+            if(Application.isPlaying)
+            playIndexResetTimer = Timer.Register(pitchShiftCooldown, () => { playIndex = 0; pitch.y = pitch.x + (pitchShiftValue * playIndex); }, useRealTime: true);
+            source.volume = Random.Range(volume.x, volume.y);
+        }
+        else
+        {
         source.volume = Random.Range(volume.x, volume.y);
         source.pitch = Random.Range(pitch.x, pitch.y);
-
+        }
         source.Play();
 
 #if UNITY_EDITOR

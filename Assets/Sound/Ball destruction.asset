@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45a7bf853624d994bace52be2ac3c1eb, type: 3}
+  m_Name: Ball destruction
+  m_EditorClassIdentifier: 
+  clip: {fileID: 8300000, guid: ac3139fb1bc0cd44b954b27f12df73e1, type: 3}
+  clips: []
+  volume: {x: 1, y: 1}
+  pitch: {x: 1, y: 1}
+  playOrder: 0
+  pitchShift: 1
+  pitchShiftValue: 0.1
+  pitchShiftCooldown: 1
+  audioMixer: {fileID: 0}
+  playIndex: 0

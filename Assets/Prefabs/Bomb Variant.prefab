@@ -5305,8 +5305,16 @@ PrefabInstance:
       value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 6678445133041041929, guid: 95020603bfab5544fb145f9f742899d0, type: 3}
+      propertyPath: Events.OnPlay.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 11400000, guid: b54e5b70b16717042aa371185b653a80, type: 2}
+    - target: {fileID: 6678445133041041929, guid: 95020603bfab5544fb145f9f742899d0, type: 3}
       propertyPath: managedReferences[7900504047997419547].Timing.InterruptsOnStop
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6678445133041041929, guid: 95020603bfab5544fb145f9f742899d0, type: 3}
+      propertyPath: Events.OnPlay.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PlaySO
       objectReference: {fileID: 0}
     - target: {fileID: 6678445133041041929, guid: 95020603bfab5544fb145f9f742899d0, type: 3}
       propertyPath: managedReferences[7900504047997419547].CameraShakeProperties.Duration
@@ -5323,6 +5331,10 @@ PrefabInstance:
     - target: {fileID: 6678445133041041929, guid: 95020603bfab5544fb145f9f742899d0, type: 3}
       propertyPath: managedReferences[7900504047997419533].PlayEvents.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
       value: Bomb
+      objectReference: {fileID: 0}
+    - target: {fileID: 6852586435079022734, guid: 95020603bfab5544fb145f9f742899d0, type: 3}
+      propertyPath: Blinking
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7442599703604423742, guid: 95020603bfab5544fb145f9f742899d0, type: 3}
       propertyPath: InitialModule.startColor.maxColor.a

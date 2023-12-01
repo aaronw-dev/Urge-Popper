@@ -28,7 +28,7 @@ public abstract class SingletonScriptableObject<T> : ScriptableObject where T : 
 
         }
     }
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
+    
     static void Init()
     {
         if (_instance == null)

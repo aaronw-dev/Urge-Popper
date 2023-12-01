@@ -91,7 +91,7 @@ public class UrgeManager : MonoBehaviour
         spawningDone = false;
         for (int i = 0; i < _i; i++)
         {
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.01f);
             SpawnRandomBall();
         }
         spawningDone = true;
