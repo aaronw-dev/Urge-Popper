@@ -6,7 +6,7 @@ public class FailState : MonoBehaviour
 {
     public float secondsToFail = 2f;
     public GameEvent FailEvent;
-
+    bool hasFailed  = false;
     Coroutine FailRoutine;
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -40,6 +40,9 @@ public class FailState : MonoBehaviour
     IEnumerator FailyCounter() 
     {
         yield return new WaitForSeconds(secondsToFail);
+        if(hasFailed)
+            yield break;
+        hasFailed = true;
         FailEvent.Raise();
     }
 }

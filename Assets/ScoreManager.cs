@@ -57,7 +57,8 @@ public class ScoreManager : MonoBehaviour
         if (!PlayerPrefs.HasKey("_id"))
         {
             using (UnityWebRequest request = UnityWebRequest.Get(IDUrl))
-            {
+            {                
+                request.SetRequestHeader("Access-Control-Allow-Origin", "*");
                 yield return request.SendWebRequest();
                 if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
                 {
@@ -101,6 +102,7 @@ public class ScoreManager : MonoBehaviour
         using (UnityWebRequest request = UnityWebRequest.Post(apiUrl, json.ToString()))
         {
             request.SetRequestHeader("Content-Type", "application/json");
+            request.SetRequestHeader("Access-Control-Allow-Origin", "*");
             yield return request.SendWebRequest();
             if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
             {
