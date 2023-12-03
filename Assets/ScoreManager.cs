@@ -57,7 +57,7 @@ public class ScoreManager : MonoBehaviour
         if (!PlayerPrefs.HasKey("_id"))
         {
             using (UnityWebRequest request = UnityWebRequest.Get(IDUrl))
-            {                
+            {
                 request.SetRequestHeader("Access-Control-Allow-Origin", "*");
                 yield return request.SendWebRequest();
                 if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
@@ -81,7 +81,6 @@ public class ScoreManager : MonoBehaviour
         string username = PlayerPrefs.GetString("_name", "");
         string id = apiid;
         string json = "{\"username\":\"" + username + "\", \"score\":" + score + ", \"id\":\"" + id + "\"}";
-        Debug.Log(json);
         using (UnityWebRequest request = UnityWebRequest.Post(apiUrl, json.ToString()))
         {
             request.SetRequestHeader("Content-Type", "application/json");
@@ -90,11 +89,6 @@ public class ScoreManager : MonoBehaviour
             if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
             {
                 Debug.LogError("Error: " + request.error);
-            }
-            else
-            {
-                Debug.Log("Request successful!");
-                Debug.Log(request.downloadHandler.text);
             }
         }
         LeaderboardManager.Instance.GetView();

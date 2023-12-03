@@ -51,7 +51,7 @@ namespace Coffee.UIExtensions
 				return mat;
 			}
 
-			Debug.Log("Generate material : " + variantName);
+			//Debug.Log("Generate material : " + variantName);
 			mat = new Material(shader);
 			mat.shaderKeywords = keywords;
 
@@ -114,7 +114,7 @@ namespace Coffee.UIExtensions
 			s_StringBuilder.Append("[Separated] ");
 #endif
 			s_StringBuilder.Append(Path.GetFileName(shader.name));
-			foreach (object mode in append.Where(x=>0<(int)x))
+			foreach (object mode in append.Where(x => 0 < (int)x))
 			{
 				s_StringBuilder.Append("-");
 				s_StringBuilder.Append(mode.ToString());

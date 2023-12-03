@@ -25,10 +25,10 @@ public class LeaderboardManager : MonoBehaviour
         Instance = this;
     }
     bool check = false;
-    public void  GetView()
+    public void GetView()
     {
-        if(check)
-        return;
+        if (check)
+            return;
 
         check = true;
         StartCoroutine(GetIdentification());
@@ -47,8 +47,6 @@ public class LeaderboardManager : MonoBehaviour
             else
             {
                 string jsonString = request.downloadHandler.text;
-
-                Debug.Log(jsonString);
 
                 // Deserialize the JSON into a Dictionary<string, PlayerData>
                 var playerDataDict = JSON.Parse(jsonString);
@@ -69,11 +67,11 @@ public class LeaderboardManager : MonoBehaviour
                     playerScoreObj.transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = (i + 1).ToString();
                     playerScoreObj.transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = playerDataList[i].username;
                     playerScoreObj.transform.GetChild(2).GetComponent<TMPro.TextMeshProUGUI>().text = playerDataList[i].highScore.ToString();
-                    if(i <= 2)
+                    if (i <= 2)
                     {
                         playerScoreObj.transform.GetChild(3).GetChild(i).gameObject.SetActive(true);
                     }
-                    if(playerDataList[i].playerId == PlayerPrefs.GetString("_id"))
+                    if (playerDataList[i].playerId == PlayerPrefs.GetString("_id"))
                     {
                         playerScoreObj.transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().color = Color.yellow;
                     }

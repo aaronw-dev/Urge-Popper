@@ -4,9 +4,27 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class LoadSceneManager : MonoBehaviour
 {
+    public static LoadSceneManager Instance;
+    public delegate void ProgressChange(float progress);
+    public event ProgressChange OnProgressChanged;
+    void Awake()
+    {
+        DontDestroyOnLoad(this.gameObject);
+        Instance = this;
+    }
     public void LoadScene(string SceneName)
     {
-        SceneManager.LoadScene(SceneName);
+        StartCoroutine(LoadSceneAsynchronous(SceneName));
+    }
+    IEnumerator LoadSceneAsynchronous(string SceneName)
+    {
+        yield return null;
+        AsyncOperation load = SceneManager.LoadSceneAsync(SceneName);
+        while (!load.isDone)
+        {
+            OnProgressChanged.Invoke(load.progress);
+            yield return null;
+        }
     }
     public void LoadScene(int SceneIndex)
     {
