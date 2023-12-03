@@ -37,6 +37,7 @@ public class LeaderboardManager : MonoBehaviour
     {
         using (UnityWebRequest request = UnityWebRequest.Get(apiUrl))
         {
+            request.SetRequestHeader("Access-Control-Allow-Origin", "*");
             yield return request.SendWebRequest();
 
             if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
