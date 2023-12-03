@@ -97,6 +97,8 @@ public class UrgeBody : MonoBehaviour, IPoolObject
     bool isHovering;
     private void OnMouseEnter()
     {
+        if (gameObject.layer == LayerMask.NameToLayer("ToBeDestroyed"))
+            return;
         OnBeginDestroy?.Invoke();
         isHovering = true;
         OutlineAndSolve();
@@ -132,6 +134,8 @@ public class UrgeBody : MonoBehaviour, IPoolObject
 
     private void OnMouseExit()
     {
+                if (gameObject.layer == LayerMask.NameToLayer("ToBeDestroyed"))
+            return;
         isHovering = false;
         OnBeginDestroy?.Invoke();
         for (int i = 0; i < contactedObjects.Count; i++)
@@ -143,6 +147,8 @@ public class UrgeBody : MonoBehaviour, IPoolObject
     }
     private void OnMouseUpAsButton()
     {
+        if (gameObject.layer == LayerMask.NameToLayer("ToBeDestroyed"))
+            return;
         isHovering = false;
         for (int i = 0; i < contactedObjects.Count; i++)
         {
