@@ -52,7 +52,11 @@ public class Client : MonoBehaviour
         }
         else
         {
+#if UNITY_EDITOR
             id = FakeID == ""?  PlayerPrefs.GetString("_id") : FakeID;
+#else
+            id = PlayerPrefs.GetString("_id") ;
+#endif
         }
         using (UnityWebRequest request = UnityWebRequest.Get(UserInformationUrl + id))
         {
