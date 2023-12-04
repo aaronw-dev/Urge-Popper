@@ -8,8 +8,6 @@ public class Client : MonoBehaviour
 {
     public static Client ActiveClient;
     [SerializeField]
-    private string IDUrl = "https://big-balls-leaderboard.aw-dev.repl.co/getid";
-    [SerializeField]
     private string UserInformationUrl = "https://big-balls-leaderboard.aw-dev.repl.co/users/";
     [ReadOnly]
     public string id = "READ FROM MEMORY";
@@ -24,40 +22,27 @@ public class Client : MonoBehaviour
         if (m_NameField && PlayerPrefs.GetString("_name", "") == "")
             m_NameField.SetActive(true);
 
-        StartCoroutine(GetInformation());
+        SetID();
     }
     void Awake()
     {
         ActiveClient = this;
         DontDestroyOnLoad(gameObject);
     }
-    IEnumerator GetInformation()
+    void SetID()
     {
-        if (!PlayerPrefs.HasKey("_id"))
-        {
-            using (UnityWebRequest request = UnityWebRequest.Get(IDUrl))
-            {
-                request.SetRequestHeader("Access-Control-Allow-Origin", "*");
-                yield return request.SendWebRequest();
-                if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
-                {
-                    Debug.LogError("Error: " + request.error);
-                }
-                else
-                {
-                    id = request.downloadHandler.text;
-                    PlayerPrefs.SetString("_id", id);
-                }
-            }
-        }
-        else
+        if (PlayerPrefs.HasKey("_id"))
         {
 #if UNITY_EDITOR
-            id = FakeID == ""?  PlayerPrefs.GetString("_id") : FakeID;
+            id = FakeID == "" ? PlayerPrefs.GetString("_id") : FakeID;
 #else
             id = PlayerPrefs.GetString("_id") ;
 #endif
+            StartCoroutine(fetchInformation());
         }
+    }
+    public IEnumerator fetchInformation()
+    {
         using (UnityWebRequest request = UnityWebRequest.Get(UserInformationUrl + id))
         {
             request.SetRequestHeader("Access-Control-Allow-Origin", "*");
@@ -76,4 +61,5 @@ public class Client : MonoBehaviour
             }
         }
     }
+
 }
