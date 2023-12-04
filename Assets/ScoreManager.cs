@@ -11,8 +11,6 @@ public class ScoreManager : MonoBehaviour
     public TMP_Text scoreText;
     private int score = 0;
     string apiUrl = "https://big-balls-leaderboard.aw-dev.repl.co/uploadscore";
-    string IDUrl = "https://big-balls-leaderboard.aw-dev.repl.co/getid";
-    public string apiid = "";
     int scoreCounter = 0;
     Coroutine scoreRoutine;
     public int PublicScore
@@ -33,7 +31,6 @@ public class ScoreManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
-        StartCoroutine(GetIdentification());
     }
     IEnumerator ScoreCounter()
     {
@@ -52,35 +49,13 @@ public class ScoreManager : MonoBehaviour
         StartCoroutine(GameEndRoutine());
     }
 
-    IEnumerator GetIdentification()
-    {
-        if (!PlayerPrefs.HasKey("_id"))
-        {
-            using (UnityWebRequest request = UnityWebRequest.Get(IDUrl))
-            {
-                request.SetRequestHeader("Access-Control-Allow-Origin", "*");
-                yield return request.SendWebRequest();
-                if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
-                {
-                    Debug.LogError("Error: " + request.error);
-                }
-                else
-                {
-                    apiid = request.downloadHandler.text;
-                    PlayerPrefs.SetString("_id", apiid);
-                }
-            }
-        }
-        else
-        {
-            apiid = PlayerPrefs.GetString("_id");
-        }
-    }
     IEnumerator GameEndRoutine()
     {
-        string username = PlayerPrefs.GetString("_name", "");
-        string id = apiid;
-        string json = "{\"username\":\"" + username + "\", \"score\":" + score + ", \"id\":\"" + id + "\"}";
+        string username = Client.ActiveClient.username;
+        string id = Client.ActiveClient.id;
+        string league = Client.ActiveClient.league;
+        string json = "{\"username\":\"" + username + "\", \"league\":\"" + league + "\", \"score\":" + score + ", \"id\":\"" + id + "\"}";
+        Debug.Log(json);
         using (UnityWebRequest request = UnityWebRequest.Post(apiUrl, json.ToString()))
         {
             request.SetRequestHeader("Content-Type", "application/json");
