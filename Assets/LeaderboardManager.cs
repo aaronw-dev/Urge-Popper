@@ -15,6 +15,7 @@ public class PlayerData
 public class LeaderboardManager : MonoBehaviour
 {
     public List<PlayerData> playerDataList = new List<PlayerData>();
+    public List<PlayerData> leagueplayerDataList = new List<PlayerData>();
     string apiUrl = "https://big-balls-leaderboard.aw-dev.repl.co/leaderboard/";
     public Transform Container;
     public Transform LeagueContainer;
@@ -107,7 +108,7 @@ public class LeaderboardManager : MonoBehaviour
                     playerData.recentScore = kvp.Value["recentScore"];
                     playerData.username = kvp.Value["username"];
                     playerData.playerId = kvp.Key; // Assign the ID
-                    playerDataList.Add(playerData);
+                    leagueplayerDataList.Add(playerData);
                 }
                 playerDataList.Sort((a, b) => b.highScore.CompareTo(a.highScore));
                 for (int i = 0; i < playerDataList.Count; i++)
