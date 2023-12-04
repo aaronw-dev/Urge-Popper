@@ -50,3 +50,4 @@ MonoBehaviour:
   username: READ FROM MEMORY
   league: READ FROM MEMORY
   m_NameField: {fileID: 0}
+  FakeID: 
