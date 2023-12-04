@@ -38,7 +38,7 @@ public class LeaderboardManager : MonoBehaviour
     }
     IEnumerator FetchLeaderboard()
     {
-        using (UnityWebRequest request = UnityWebRequest.Get(apiUrl + Client.ActiveClient.league))
+        using (UnityWebRequest request = UnityWebRequest.Get(apiUrl + "global"))
         {
             request.SetRequestHeader("Access-Control-Allow-Origin", "*");
             yield return request.SendWebRequest();
@@ -97,6 +97,7 @@ public class LeaderboardManager : MonoBehaviour
             else
             {
                 string jsonString = request.downloadHandler.text;
+                Debug.Log(jsonString);
 
                 // Deserialize the JSON into a Dictionary<string, PlayerData>
                 var playerDataDict = JSON.Parse(jsonString);
@@ -110,13 +111,13 @@ public class LeaderboardManager : MonoBehaviour
                     playerData.playerId = kvp.Key; // Assign the ID
                     leagueplayerDataList.Add(playerData);
                 }
-                playerDataList.Sort((a, b) => b.highScore.CompareTo(a.highScore));
-                for (int i = 0; i < playerDataList.Count; i++)
+                leagueplayerDataList.Sort((a, b) => b.highScore.CompareTo(a.highScore));
+                for (int i = 0; i < leagueplayerDataList.Count; i++)
                 {
                     GameObject playerScoreObj = Instantiate(PlayerScorePrefab, LeagueContainer);
                     playerScoreObj.transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = (i + 1).ToString();
-                    playerScoreObj.transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = playerDataList[i].username;
-                    playerScoreObj.transform.GetChild(2).GetComponent<TMPro.TextMeshProUGUI>().text = playerDataList[i].highScore.ToString();
+                    playerScoreObj.transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = leagueplayerDataList[i].username;
+                    playerScoreObj.transform.GetChild(2).GetComponent<TMPro.TextMeshProUGUI>().text = leagueplayerDataList[i].highScore.ToString();
                     if (i <= 2)
                     {
                         playerScoreObj.transform.GetChild(3).GetChild(i).gameObject.SetActive(true);
