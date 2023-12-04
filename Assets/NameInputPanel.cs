@@ -22,6 +22,7 @@ public class NameInputPanel : MonoBehaviour
         string combinedName = randomPrefix + " " + name;
         PlayerPrefs.SetString("_name", combinedName);
         PlayerPrefs.Save();
+        Client.ActiveClient.name = combinedName;
         this.gameObject.SetActive(false);
     }
 }
