@@ -110,18 +110,18 @@ public class LeaderboardManager : MonoBehaviour
                     playerData.playerId = kvp.Key; // Assign the ID
                     leagueplayerDataList.Add(playerData);
                 }
-                playerDataList.Sort((a, b) => b.highScore.CompareTo(a.highScore));
-                for (int i = 0; i < playerDataList.Count; i++)
+                leagueplayerDataList.Sort((a, b) => b.highScore.CompareTo(a.highScore));
+                for (int i = 0; i < leagueplayerDataList.Count; i++)
                 {
                     GameObject playerScoreObj = Instantiate(PlayerScorePrefab, LeagueContainer);
                     playerScoreObj.transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = (i + 1).ToString();
-                    playerScoreObj.transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = playerDataList[i].username;
-                    playerScoreObj.transform.GetChild(2).GetComponent<TMPro.TextMeshProUGUI>().text = playerDataList[i].highScore.ToString();
+                    playerScoreObj.transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = leagueplayerDataList[i].username;
+                    playerScoreObj.transform.GetChild(2).GetComponent<TMPro.TextMeshProUGUI>().text = leagueplayerDataList[i].highScore.ToString();
                     if (i <= 2)
                     {
                         playerScoreObj.transform.GetChild(3).GetChild(i).gameObject.SetActive(true);
                     }
-                    if (playerDataList[i].playerId == Client.ActiveClient.id)
+                    if (leagueplayerDataList[i].playerId == Client.ActiveClient.id)
                     {
                         playerScoreObj.transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().color = Color.yellow;
                     }
