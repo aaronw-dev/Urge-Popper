@@ -15,7 +15,7 @@ public class PlayerData
 public class LeaderboardManager : MonoBehaviour
 {
     public List<PlayerData> playerDataList = new List<PlayerData>();
-    string apiUrl = "https://big-balls-leaderboard.aw-dev.repl.co/leaderboard/main";
+    string apiUrl = "https://big-balls-leaderboard.aw-dev.repl.co/leaderboard/";
     public Transform Container;
     public GameObject PlayerScorePrefab;
     public static LeaderboardManager Instance;
@@ -31,11 +31,11 @@ public class LeaderboardManager : MonoBehaviour
             return;
 
         check = true;
-        StartCoroutine(GetIdentification());
+        StartCoroutine(FetchLeaderboard());
     }
-    IEnumerator GetIdentification()
+    IEnumerator FetchLeaderboard()
     {
-        using (UnityWebRequest request = UnityWebRequest.Get(apiUrl))
+        using (UnityWebRequest request = UnityWebRequest.Get(apiUrl + Client.ActiveClient.league))
         {
             request.SetRequestHeader("Access-Control-Allow-Origin", "*");
             yield return request.SendWebRequest();
@@ -71,7 +71,7 @@ public class LeaderboardManager : MonoBehaviour
                     {
                         playerScoreObj.transform.GetChild(3).GetChild(i).gameObject.SetActive(true);
                     }
-                    if (playerDataList[i].playerId == PlayerPrefs.GetString("_id"))
+                    if (playerDataList[i].playerId == Client.ActiveClient.id)
                     {
                         playerScoreObj.transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().color = Color.yellow;
                     }
