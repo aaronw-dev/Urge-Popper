@@ -122,7 +122,7 @@ public class LeaderboardManager : MonoBehaviour
                     {
                         playerScoreObj.transform.GetChild(3).GetChild(i).gameObject.SetActive(true);
                     }
-                    if (playerDataList[i].playerId == Client.ActiveClient.id)
+                    if (leagueplayerDataList[i].playerId == Client.ActiveClient.id)
                     {
                         playerScoreObj.transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().color = Color.yellow;
                     }
