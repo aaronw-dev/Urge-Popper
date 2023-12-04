@@ -1741,9 +1741,9 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   DestroyFeedback: {fileID: 6678445133041041929}
-  radius: 0.95
-  forceMagnitude: 2.5
-  rayCount: 9
+  radius: 0.8
+  forceMagnitude: 4
+  rayCount: 14
   _nodes: []
   _hierachyNodes: []
 --- !u!114 &8204776961453899508

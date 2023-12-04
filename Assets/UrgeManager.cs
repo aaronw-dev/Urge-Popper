@@ -6,6 +6,7 @@ using NaughtyAttributes;
 using Redcode.Pools;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
 [System.Serializable]
@@ -47,6 +48,7 @@ public class UrgeManager : MonoBehaviour
     public TextMeshProUGUI movesTxt;
     int movesLeft;
     public bool spawningDone = true;
+    [ReadOnly] public bool overUI = false;
     [Header("Combo Phrases")]
     public ComboCelebText[] comboPhrases;
     private void Start()
@@ -61,6 +63,19 @@ public class UrgeManager : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
+    }
+    private void Update()
+    {
+        overUI = EventSystem.current.IsPointerOverGameObject();
+        foreach (Touch touch in Input.touches)
+        {
+            int id = touch.fingerId;
+            if (EventSystem.current.IsPointerOverGameObject(id))
+            {
+                overUI = true;
+                break;
+            }
+        }
     }
     public Urge currentUrge(int index)
     {

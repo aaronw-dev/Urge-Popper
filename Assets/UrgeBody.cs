@@ -8,6 +8,7 @@ using Redcode.Pools;
 using MoreMountains.Feedbacks;
 using System.Linq;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 public class UrgeBody : MonoBehaviour, IPoolObject
 {
@@ -29,6 +30,7 @@ public class UrgeBody : MonoBehaviour, IPoolObject
     public float forceMagnitude = 10f;  
     public int rayCount = 36;           
     float initGraphicScale;
+  
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -37,8 +39,7 @@ public class UrgeBody : MonoBehaviour, IPoolObject
         initGraphicScale = transform.GetChild(1).localScale.x;
         //UpdateUrge();
     }
-    
-    private void OnEnable()
+        private void OnEnable()
     {
         UpdateUrge();
     }
@@ -98,6 +99,7 @@ public class UrgeBody : MonoBehaviour, IPoolObject
     }
     private void Update()
     {
+       
         if ( Time.frameCount % 5 == 0)
         {
             if(isHovering)
@@ -205,6 +207,7 @@ public class UrgeBody : MonoBehaviour, IPoolObject
     bool isHovering;
     private void OnMouseEnter()
     {
+        if (UrgeManager.Instance.overUI) return;
         if (gameObject.layer == LayerMask.NameToLayer("ToBeDestroyed"))
             return;
         OnBeginDestroy?.Invoke();
@@ -242,7 +245,8 @@ public class UrgeBody : MonoBehaviour, IPoolObject
 
     private void OnMouseExit()
     {
-                if (gameObject.layer == LayerMask.NameToLayer("ToBeDestroyed"))
+        if (UrgeManager.Instance.overUI) return;
+        if (gameObject.layer == LayerMask.NameToLayer("ToBeDestroyed"))
             return;
         isHovering = false;
         OnBeginDestroy?.Invoke();
@@ -255,6 +259,7 @@ public class UrgeBody : MonoBehaviour, IPoolObject
     }
     private void OnMouseUpAsButton()
     {
+        if (UrgeManager.Instance.overUI) return;
         if (gameObject.layer == LayerMask.NameToLayer("ToBeDestroyed"))
             return;
         isHovering = false;

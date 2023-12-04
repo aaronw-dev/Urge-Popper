@@ -17,8 +17,13 @@ public class Client : MonoBehaviour
     public string username = "READ FROM MEMORY";
     [ReadOnly]
     public string league = "READ FROM MEMORY";
+    public GameObject m_NameField;
+    public string FakeID = "2j76QAJrqeriVYdQ7ZsD6N4IJZqDFS8ljYOWGAPtwTJTAvxhXO4HY0toL9kK23B3wJ9Cp";
     void Start()
     {
+        if (m_NameField && PlayerPrefs.GetString("_name", "") == "")
+            m_NameField.SetActive(true);
+
         StartCoroutine(GetInformation());
     }
     void Awake()
@@ -47,7 +52,7 @@ public class Client : MonoBehaviour
         }
         else
         {
-            id = PlayerPrefs.GetString("_id");
+            id = FakeID == ""?  PlayerPrefs.GetString("_id") : FakeID;
         }
         using (UnityWebRequest request = UnityWebRequest.Get(UserInformationUrl + id))
         {
