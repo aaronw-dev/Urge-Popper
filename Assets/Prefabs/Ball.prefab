@@ -1590,6 +1590,7 @@ GameObject:
   - component: {fileID: 6486739927593047772}
   - component: {fileID: 8204776961453899508}
   - component: {fileID: 6995330033056768839}
+  - component: {fileID: 3648902873992227149}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Ball
@@ -1740,6 +1741,9 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   DestroyFeedback: {fileID: 6678445133041041929}
+  radius: 0.95
+  forceMagnitude: 2.5
+  rayCount: 9
   _nodes: []
   _hierachyNodes: []
 --- !u!114 &8204776961453899508
@@ -1826,6 +1830,38 @@ MonoBehaviour:
   invokeCheckOnEnable: 1
   m_disableFirstEvent: 0
   realTime: 1
+--- !u!114 &3648902873992227149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6486739927593047769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e839e4c12473014b9b3d3faccc0f61d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: cf59855c9fc508942ab16be7d38f2737, type: 2}
+  delay: 0
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6486739927593047772}
+        m_TargetAssemblyTypeName: UrgeBody, Assembly-CSharp
+        m_MethodName: ApplyRandomForce
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  invokeCheckOnEnable: 0
+  m_disableFirstEvent: 0
+  realTime: 0
 --- !u!1 &7442599703604423736
 GameObject:
   m_ObjectHideFlags: 0

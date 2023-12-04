@@ -23,6 +23,11 @@ public class UrgeBody : MonoBehaviour, IPoolObject
     [Header("Feedback")]
     public UnityEvent OnBeginDestroy;
     public MMFeedbacks DestroyFeedback;
+
+    [Header("Ray Casting")]
+    public float radius = 5f;           
+    public float forceMagnitude = 10f;  
+    public int rayCount = 36;           
     float initGraphicScale;
     void Awake()
     {
@@ -51,6 +56,8 @@ public class UrgeBody : MonoBehaviour, IPoolObject
     }
 
     public List<List<Transform>> hierarchyList = new List<List<Transform>>();
+    Vector2[] rayDirections;
+    RaycastHit2D[] hits;
     void BuildHierarchy()
     {
         foreach (Node node in _nodes)
@@ -91,9 +98,110 @@ public class UrgeBody : MonoBehaviour, IPoolObject
     }
     private void Update()
     {
-        if (isHovering && Time.frameCount % 5 == 0)
-            OutlineAndSolve();
+        if ( Time.frameCount % 5 == 0)
+        {
+            if(isHovering)
+                OutlineAndSolve();
+
+
+          
+        }
+#if UNITY_EDITOR
+        rayDirections = CalculateRayDirections();
+        hits = ShootRays(rayDirections);
+
+        VisualizeRays(rayDirections, hits);
+#endif
     }
+
+
+    public void ApplyRandomForce() 
+    {
+        StartCoroutine(ApplyRandomForceFixedUpdate());
+    }
+    IEnumerator ApplyRandomForceFixedUpdate() 
+    {
+        rayDirections = CalculateRayDirections();
+        hits = ShootRays(rayDirections);
+
+        VisualizeRays(rayDirections, hits);
+
+        int randomRayIndex = GetRandomNonCollidingRayIndex(hits);
+        yield return new WaitForFixedUpdate();
+        if (randomRayIndex != -1)
+        {
+            ApplyForce(rayDirections[randomRayIndex]);
+        }
+    }
+    Vector2[] CalculateRayDirections()
+    {
+        Vector2[] directions = new Vector2[rayCount];
+        for (int i = 0; i < rayCount; i++)
+        {
+            float angle = i * (360f / rayCount);
+            directions[i] = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad));
+        }
+        return directions;
+    }
+
+    RaycastHit2D[] ShootRays(Vector2[] rayDirections)
+    {
+        RaycastHit2D[] hits = new RaycastHit2D[rayCount];
+
+        for (int i = 0; i < rayCount; i++)
+        {
+            RaycastHit2D[] rayHits = Physics2D.RaycastAll(transform.position, rayDirections[i], radius);
+            for (int j = 0; j < rayHits.Length; j++)
+            {
+                if (rayHits[j].collider.transform != transform)
+                {
+                    hits[i] = rayHits[j];
+                    break;
+                }
+            }
+        }
+
+        return hits;
+    }
+
+    void VisualizeRays(Vector2[] rayDirections, RaycastHit2D[] hits)
+    {
+        for (int i = 0; i < rayCount; i++)
+        {
+            Debug.DrawRay(transform.position, rayDirections[i] * radius, hits[i].collider ? Color.red : Color.green);
+        }
+    }
+
+    int GetRandomNonCollidingRayIndex(RaycastHit2D[] hits)
+    {
+        List<int> nonCollidingIndices = new List<int>();
+        for (int i = 0; i < rayCount; i++)
+        {
+            if (!hits[i].collider)
+            {
+                nonCollidingIndices.Add(i);
+            }
+        }
+
+        if (nonCollidingIndices.Count > 0)
+        {
+            return nonCollidingIndices[Random.Range(0, nonCollidingIndices.Count)];
+        }
+        else
+        {
+            return -1;
+        }
+    }
+
+    void ApplyForce(Vector2 direction)
+    {
+        Vector2 forceVector = direction * forceMagnitude;
+        if (rb != null)
+        {
+            rb.AddForce(forceVector,ForceMode2D.Impulse);
+        }
+    }
+
     bool isHovering;
     private void OnMouseEnter()
     {
