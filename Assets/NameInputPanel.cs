@@ -50,9 +50,8 @@ public class NameInputPanel : MonoBehaviour
         }
         string username = Client.ActiveClient.username;
         string id = Client.ActiveClient.id;
-        string league = "nutter";
+        string league = Client.ActiveClient.league = "nutter";
         string json = "{\"username\":\"" + username + "\", \"league\":\"" + league + "\", \"score\":" + 0 + ", \"id\":\"" + id + "\"}";
-        Debug.Log(json);
         using (UnityWebRequest request = UnityWebRequest.Post(apiUrl, json.ToString()))
         {
             request.SetRequestHeader("Content-Type", "application/json");

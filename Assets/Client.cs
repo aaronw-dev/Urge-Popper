@@ -40,6 +40,10 @@ public class Client : MonoBehaviour
 #endif
             StartCoroutine(fetchInformation());
         }
+        else
+        {
+            m_NameField.transform.GetChild(0).gameObject.SetActive(true);
+        }
     }
     public IEnumerator fetchInformation()
     {
@@ -63,7 +67,6 @@ public class Client : MonoBehaviour
                 if (username == "" || league == "")
                 {
                     m_NameField.transform.GetChild(0).gameObject.SetActive(true);
-                    PlayerPrefs.DeleteAll();
                 }
             }
         }
