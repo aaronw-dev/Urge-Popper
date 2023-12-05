@@ -14,7 +14,7 @@ public class NameInputPanel : MonoBehaviour
     void Start()
     {
         container = transform.GetChild(0).gameObject;
-        container.SetActive(!PlayerPrefs.HasKey("_name"));
+        Client.ActiveClient.fetchInformation();
     }
     public void Submit()
     {
