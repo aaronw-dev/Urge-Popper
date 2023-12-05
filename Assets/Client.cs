@@ -62,7 +62,6 @@ public class Client : MonoBehaviour
                 league = userInformation["league"];
                 username = userInformation["username"];
                 PlayerPrefs.SetString("_name", username);
-                Debug.Log("\"" + username + "\"");
 
                 if (username == "" || league == "")
                 {
