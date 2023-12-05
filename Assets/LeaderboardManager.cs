@@ -51,16 +51,14 @@ public class LeaderboardManager : MonoBehaviour
             {
                 string jsonString = request.downloadHandler.text;
 
-                // Deserialize the JSON into a Dictionary<string, PlayerData>
                 var playerDataDict = JSON.Parse(jsonString);
-                // Extract values into the list, including the ID
                 foreach (var kvp in playerDataDict)
                 {
                     PlayerData playerData = new PlayerData();
                     playerData.highScore = kvp.Value["highScore"];
                     playerData.recentScore = kvp.Value["recentScore"];
                     playerData.username = kvp.Value["username"];
-                    playerData.playerId = kvp.Key; // Assign the ID
+                    playerData.playerId = kvp.Key;
                     playerDataList.Add(playerData);
                 }
                 playerDataList.Sort((a, b) => b.highScore.CompareTo(a.highScore));
@@ -97,18 +95,14 @@ public class LeaderboardManager : MonoBehaviour
             else
             {
                 string jsonString = request.downloadHandler.text;
-                Debug.Log(jsonString);
-
-                // Deserialize the JSON into a Dictionary<string, PlayerData>
                 var playerDataDict = JSON.Parse(jsonString);
-                // Extract values into the list, including the ID
                 foreach (var kvp in playerDataDict)
                 {
                     PlayerData playerData = new PlayerData();
                     playerData.highScore = kvp.Value["highScore"];
                     playerData.recentScore = kvp.Value["recentScore"];
                     playerData.username = kvp.Value["username"];
-                    playerData.playerId = kvp.Key; // Assign the ID
+                    playerData.playerId = kvp.Key;
                     leagueplayerDataList.Add(playerData);
                 }
                 leagueplayerDataList.Sort((a, b) => b.highScore.CompareTo(a.highScore));
