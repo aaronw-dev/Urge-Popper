@@ -23,6 +23,7 @@ public class ScoreManager : MonoBehaviour
         {
             score = value;
             PlayerPrefs.SetInt("score", score);
+            PlayerPrefs.Save();
             if (scoreRoutine != null)
                 StopCoroutine(scoreRoutine);
             scoreRoutine = StartCoroutine(ScoreCounter());

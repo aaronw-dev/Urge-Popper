@@ -46,6 +46,7 @@ public class NameInputPanel : MonoBehaviour
             {
                 Client.ActiveClient.id = request.downloadHandler.text;
                 PlayerPrefs.SetString("_id", Client.ActiveClient.id);
+                PlayerPrefs.Save();
             }
         }
         string username = Client.ActiveClient.username;
