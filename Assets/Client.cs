@@ -62,7 +62,7 @@ public class Client : MonoBehaviour
                 league = userInformation["league"];
                 username = userInformation["username"];
                 PlayerPrefs.SetString("_name", username);
-
+                PlayerPrefs.Save();
                 if (username == "" || league == "")
                 {
                     m_NameField.transform.GetChild(0).gameObject.SetActive(true);
