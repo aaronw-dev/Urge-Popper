@@ -9,12 +9,16 @@ public class Client : MonoBehaviour
     public static Client ActiveClient;
     [SerializeField]
     private string UserInformationUrl = "https://big-balls-leaderboard.aw-dev.repl.co/users/";
+    [SerializeField]
+    private string UserIPUrl = "https://big-balls-leaderboard.aw-dev.repl.co/findmyip";
     [ReadOnly]
     public string id = "READ FROM MEMORY";
     [ReadOnly]
     public string username = "READ FROM MEMORY";
     [ReadOnly]
     public string league = "READ FROM MEMORY";
+    [ReadOnly]
+    public string countryCode = "READ FROM MEMORY";
     public GameObject m_NameField;
     public string FakeID = "2j76QAJrqeriVYdQ7ZsD6N4IJZqDFS8ljYOWGAPtwTJTAvxhXO4HY0toL9kK23B3wJ9Cp";
     void Start()
@@ -45,6 +49,30 @@ public class Client : MonoBehaviour
             m_NameField.transform.GetChild(0).gameObject.SetActive(true);
         }
     }
+    public IEnumerator fetchIPInformation()
+    {
+        using (UnityWebRequest request = UnityWebRequest.Get(UserIPUrl))
+        {
+            request.SetRequestHeader("Access-Control-Allow-Origin", "*");
+            yield return request.SendWebRequest();
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.LogError("Error: " + request.error);
+            }
+            else
+            {
+                string userJSON = request.downloadHandler.text;
+                var userInformation = JSON.Parse(userJSON);
+                countryCode = userInformation["countryCode"];
+                PlayerPrefs.SetString("_name", username);
+                PlayerPrefs.Save();
+                if (username == "" || league == "")
+                {
+                    m_NameField.transform.GetChild(0).gameObject.SetActive(true);
+                }
+            }
+        }
+    }
     public IEnumerator fetchInformation()
     {
         using (UnityWebRequest request = UnityWebRequest.Get(UserInformationUrl + id))
@@ -69,6 +97,7 @@ public class Client : MonoBehaviour
                 }
             }
         }
+        StartCoroutine(fetchIPInformation());
     }
 
 }

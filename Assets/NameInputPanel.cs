@@ -64,5 +64,6 @@ public class NameInputPanel : MonoBehaviour
             }
         }
         container.SetActive(false);
+        StartCoroutine(Client.ActiveClient.fetchIPInformation());
     }
 }
