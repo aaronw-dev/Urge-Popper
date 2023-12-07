@@ -43,6 +43,7 @@ public class Client : MonoBehaviour
             id = PlayerPrefs.GetString("_id") ;
 #endif
             StartCoroutine(fetchInformation());
+            m_NameField.transform.GetChild(0).gameObject.SetActive(false);
         }
         else
         {
@@ -62,14 +63,11 @@ public class Client : MonoBehaviour
             else
             {
                 string userJSON = request.downloadHandler.text;
+                Debug.Log(userJSON);
                 var userInformation = JSON.Parse(userJSON);
                 countryCode = userInformation["countryCode"];
                 PlayerPrefs.SetString("_name", username);
                 PlayerPrefs.Save();
-                if (username == "" || league == "")
-                {
-                    m_NameField.transform.GetChild(0).gameObject.SetActive(true);
-                }
             }
         }
     }
@@ -94,6 +92,10 @@ public class Client : MonoBehaviour
                 if (username == "" || league == "")
                 {
                     m_NameField.transform.GetChild(0).gameObject.SetActive(true);
+                }
+                else
+                {
+                    m_NameField.transform.GetChild(0).gameObject.SetActive(false);
                 }
             }
         }
