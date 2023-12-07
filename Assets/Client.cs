@@ -4,6 +4,7 @@ using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Networking;
 using SimpleJSON;
+using UnityEngine.UI;
 public class Client : MonoBehaviour
 {
     public static Client ActiveClient;
@@ -21,6 +22,7 @@ public class Client : MonoBehaviour
     public string countryCode = "READ FROM MEMORY";
     public GameObject m_NameField;
     public string FakeID = "2j76QAJrqeriVYdQ7ZsD6N4IJZqDFS8ljYOWGAPtwTJTAvxhXO4HY0toL9kK23B3wJ9Cp";
+    public Image flag;
     void Start()
     {
         if (m_NameField && PlayerPrefs.GetString("_name", "") == "")
@@ -66,6 +68,9 @@ public class Client : MonoBehaviour
                 Debug.Log(userJSON);
                 var userInformation = JSON.Parse(userJSON);
                 countryCode = userInformation["countryCode"];
+
+                var sprite = Resources.Load<Sprite>("Flags/" + countryCode);
+                flag.sprite = sprite;
                 PlayerPrefs.SetString("_name", username);
                 PlayerPrefs.Save();
             }
