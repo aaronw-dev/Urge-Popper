@@ -45,10 +45,12 @@ public class Client : MonoBehaviour
             id = PlayerPrefs.GetString("_id") ;
 #endif
             StartCoroutine(fetchInformation());
-            m_NameField.transform.GetChild(0).gameObject.SetActive(false);
+            if (m_NameField)
+                m_NameField.transform.GetChild(0).gameObject.SetActive(false);
         }
         else
         {
+            if(m_NameField)
             m_NameField.transform.GetChild(0).gameObject.SetActive(true);
         }
     }
@@ -96,11 +98,13 @@ public class Client : MonoBehaviour
                 PlayerPrefs.Save();
                 if (username == "" || league == "")
                 {
-                    m_NameField.transform.GetChild(0).gameObject.SetActive(true);
+                    if (m_NameField)
+                        m_NameField.transform.GetChild(0).gameObject.SetActive(true);
                 }
                 else
                 {
-                    m_NameField.transform.GetChild(0).gameObject.SetActive(false);
+                    if (m_NameField)
+                        m_NameField.transform.GetChild(0).gameObject.SetActive(false);
                 }
             }
         }

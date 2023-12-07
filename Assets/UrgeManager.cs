@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using JetBrains.Annotations;
+using MoreMountains.Feedbacks;
 using MoreMountains.Tools;
 using NaughtyAttributes;
 using Redcode.Pools;
@@ -106,19 +107,58 @@ public class UrgeManager : MonoBehaviour
     {
         t.gameObject.layer = LayerMask.NameToLayer("ToBeDestroyed");
         collider.gameObject.layer = LayerMask.NameToLayer("ToBeDestroyed");
+        t.GetChild(1).GetComponent<MMBlink>().StartBlinking();
+        collider.transform.GetChild(1).GetComponent<MMBlink>().StartBlinking();
         Sequence MergeSeq = DOTween.Sequence();
-        Vector3 middleDistance = Vector3.Lerp(transform.position, collider.transform.position, 0.5f);
-        MergeSeq.Append(gameObject.transform.GetChild(1).DOMove(middleDistance, 0.25f).SetEase(Ease.InBack));
-        MergeSeq.Insert(0, collider.transform.GetChild(1).DOMove(middleDistance, 0.25f).SetEase(Ease.InBack));
-        MergeSeq.AppendCallback(() => { UrgeManager.Instance._poolManager.GetFromPool<Transform>(bombComboString[Mathf.Abs(currentUrge)]); });
+        Vector3 middleDistance = Vector3.Lerp(t.position, collider.transform.position, 0.5f);
+        MergeSeq.Append(t.transform.GetChild(1).DOMove(middleDistance, 0.45f).SetEase(Ease.InBack));
+        MergeSeq.Insert(0, collider.transform.GetChild(1).DOMove(middleDistance, 0.45f).SetEase(Ease.InBack));
+        MergeSeq.AppendCallback(() => 
+        { 
+            GameObject newBomb = _poolManager.GetFromPool<Transform>(bombComboString[Mathf.Abs(currentUrge)]).gameObject;
+            newBomb.transform.position = middleDistance;
+            newBomb.transform.DOScale(0, 0);
+            newBomb.transform.DOScale(1, 0.2f);
+            Collider2D[] hitResults = Physics2D.OverlapCircleAll(middleDistance, newBomb.GetComponent<UrgeBody>().bombMergeRadius);
+            for (int j = 0; j < hitResults.Length; j++)
+            {
+                Collider2D collider = hitResults[j];
+                if (collider.CompareTag("Ball") && collider.gameObject != gameObject)
+                {
+                    AddExplosionForce(collider.attachedRigidbody, 100, middleDistance, newBomb.GetComponent<UrgeBody>().bombMergeRadius, mode: ForceMode2D.Impulse);
+                }
+            }
+        });
         MergeSeq.AppendInterval(0.1f);
         MergeSeq.AppendCallback(() =>
         {
-            gameObject.transform.GetChild(1).DOLocalMove(Vector3.zero, 0);
+            t.transform.GetChild(1).DOLocalMove(Vector3.zero, 0);
             collider.gameObject.transform.GetChild(1).DOLocalMove(Vector3.zero, 0);
             _poolManager.TakeToPool<Transform>(bombComboString[Mathf.Abs(currentUrge) - 1], collider.transform);
             _poolManager.TakeToPool<Transform>(bombComboString[Mathf.Abs(currentUrge) - 1], t);
+            t.gameObject.layer = 0;
+            collider.gameObject.layer = 0;
         });
+    }
+    public void AddExplosionForce(Rigidbody2D rb, float explosionForce, Vector2 explosionPosition, float explosionRadius, float upwardsModifier = 0.0F, ForceMode2D mode = ForceMode2D.Force)
+    {
+        var explosionDir = rb.position - explosionPosition;
+        var explosionDistance = (explosionDir.magnitude / explosionRadius);
+
+        // Normalize without computing magnitude again
+        if (upwardsModifier == 0)
+        {
+            explosionDir /= explosionDistance;
+        }
+        else
+        {
+            // If you pass a non-zero value for the upwardsModifier parameter, the direction
+            // will be modified by subtracting that value from the Y component of the centre point.
+            explosionDir.y += upwardsModifier;
+            explosionDir.Normalize();
+        }
+
+        rb.AddForce(Mathf.Lerp(0, explosionForce, (1 - explosionDistance)) * explosionDir, mode);
     }
     IEnumerator SpawnBalls(int _i) 
     {
