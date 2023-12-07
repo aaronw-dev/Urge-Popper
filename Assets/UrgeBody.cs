@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
 using NaughtyAttributes;
-using Unity.VisualScripting;
 using Redcode.Pools;
 using MoreMountains.Feedbacks;
 using System.Linq;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using DG.Tweening;
 
 public class UrgeBody : MonoBehaviour, IPoolObject
 {
@@ -21,6 +21,8 @@ public class UrgeBody : MonoBehaviour, IPoolObject
     public List<int> contactGroups = new List<int>();
     public bool hasPassedInJars;
     public bool isBomb;
+    public float bombMergeRadius = 1.5f;
+
     [Header("Feedback")]
     public UnityEvent OnBeginDestroy;
     public MMFeedbacks DestroyFeedback;
@@ -30,7 +32,8 @@ public class UrgeBody : MonoBehaviour, IPoolObject
     public float forceMagnitude = 10f;  
     public int rayCount = 36;           
     float initGraphicScale;
-  
+
+    int bombCheckFrameRate = 0;
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -42,6 +45,11 @@ public class UrgeBody : MonoBehaviour, IPoolObject
         private void OnEnable()
     {
         UpdateUrge();
+        if (isBomb)
+        {
+            bombCheckFrameRate = Random.Range(3, 9);
+           
+        }
     }
     [Button]
     public void SolveThisBall()
@@ -99,14 +107,26 @@ public class UrgeBody : MonoBehaviour, IPoolObject
     }
     private void Update()
     {
-       
+        if (gameObject.layer == LayerMask.NameToLayer("ToBeDestroyed"))
+            return;
         if ( Time.frameCount % 5 == 0)
         {
             if(isHovering)
                 OutlineAndSolve();
+        }
 
+        if(isBomb && Time.frameCount % bombCheckFrameRate ==0 ) 
+        {
+            Collider2D[] hitResults = Physics2D.OverlapCircleAll(transform.position, bombMergeRadius);
+            for (int j = 0; j < hitResults.Length; j++)
+            {
+                Collider2D collider = hitResults[j];
 
-          
+                if (collider.CompareTag("Ball") && collider.gameObject != gameObject && collider.GetComponent<UrgeBody>().currentUrge == currentUrge && currentUrge >= -(UrgeManager.Instance.bombComboString.Length-1))
+                {
+                    UrgeManager.Instance.MergeSequence(collider, transform,currentUrge);
+                }
+            }
         }
 #if UNITY_EDITOR
         rayDirections = CalculateRayDirections();
@@ -116,6 +136,7 @@ public class UrgeBody : MonoBehaviour, IPoolObject
 #endif
     }
 
+   
 
     public void ApplyRandomForce() 
     {
@@ -306,6 +327,9 @@ public class UrgeBody : MonoBehaviour, IPoolObject
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, triggerRadius);
+        Gizmos.color = Color.black;
+        if(isBomb)
+        Gizmos.DrawWireSphere(transform.position, bombMergeRadius);
     }
 
     [System.Serializable]

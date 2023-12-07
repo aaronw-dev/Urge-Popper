@@ -5240,6 +5240,10 @@ PrefabInstance:
       propertyPath: triggerRadius
       value: 1.93
       objectReference: {fileID: 0}
+    - target: {fileID: 6486739927593047772, guid: 95020603bfab5544fb145f9f742899d0, type: 3}
+      propertyPath: bombMergeRadius
+      value: 0.7
+      objectReference: {fileID: 0}
     - target: {fileID: 6486739927593047774, guid: 95020603bfab5544fb145f9f742899d0, type: 3}
       propertyPath: m_RootOrder
       value: 0
