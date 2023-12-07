@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using JetBrains.Annotations;
 using MoreMountains.Tools;
 using NaughtyAttributes;
@@ -51,6 +52,7 @@ public class UrgeManager : MonoBehaviour
     [ReadOnly] public bool overUI = false;
     [Header("Combo Phrases")]
     public ComboCelebText[] comboPhrases;
+    public string[] bombComboString;
     private void Start()
     {
         if (Instance == null)
@@ -100,7 +102,24 @@ public class UrgeManager : MonoBehaviour
     {
         StartCoroutine( SpawnBalls(nextSpawnAmount));
     }
-
+    public void MergeSequence(Collider2D collider, Transform t, int currentUrge)
+    {
+        t.gameObject.layer = LayerMask.NameToLayer("ToBeDestroyed");
+        collider.gameObject.layer = LayerMask.NameToLayer("ToBeDestroyed");
+        Sequence MergeSeq = DOTween.Sequence();
+        Vector3 middleDistance = Vector3.Lerp(transform.position, collider.transform.position, 0.5f);
+        MergeSeq.Append(gameObject.transform.GetChild(1).DOMove(middleDistance, 0.25f).SetEase(Ease.InBack));
+        MergeSeq.Insert(0, collider.transform.GetChild(1).DOMove(middleDistance, 0.25f).SetEase(Ease.InBack));
+        MergeSeq.AppendCallback(() => { UrgeManager.Instance._poolManager.GetFromPool<Transform>(bombComboString[Mathf.Abs(currentUrge)]); });
+        MergeSeq.AppendInterval(0.1f);
+        MergeSeq.AppendCallback(() =>
+        {
+            gameObject.transform.GetChild(1).DOLocalMove(Vector3.zero, 0);
+            collider.gameObject.transform.GetChild(1).DOLocalMove(Vector3.zero, 0);
+            _poolManager.TakeToPool<Transform>(bombComboString[Mathf.Abs(currentUrge) - 1], collider.transform);
+            _poolManager.TakeToPool<Transform>(bombComboString[Mathf.Abs(currentUrge) - 1], t);
+        });
+    }
     IEnumerator SpawnBalls(int _i) 
     {
         spawningDone = false;

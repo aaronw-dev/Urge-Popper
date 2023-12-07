@@ -5049,6 +5049,16 @@ MonoBehaviour:
     _count: 10
     _container: {fileID: 714024058}
     _nonLazy: 1
+  - _name: BiggerBomb
+    _component: {fileID: 475798413425260558, guid: b975cd8bd5fe1e64abb1fc472cb073a9, type: 3}
+    _count: 10
+    _container: {fileID: 714024058}
+    _nonLazy: 1
+  - _name: NuclearBomb
+    _component: {fileID: 475798413425260558, guid: b975cd8bd5fe1e64abb1fc472cb073a9, type: 3}
+    _count: 10
+    _container: {fileID: 714024058}
+    _nonLazy: 1
 --- !u!4 &714024058
 Transform:
   m_ObjectHideFlags: 0
@@ -6584,6 +6594,10 @@ MonoBehaviour:
     - Impressive
     - 'Mind-blowing '
     - Fat Load
+  bombComboString:
+  - Bomb
+  - BiggerBomb
+  - NuclearBomb
   maxX: 0.37
   spawnYOffset: 3.94
 --- !u!4 &1120390028 stripped

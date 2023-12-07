@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
 using NaughtyAttributes;
-using Unity.VisualScripting;
 using Redcode.Pools;
 using MoreMountains.Feedbacks;
 using System.Linq;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using DG.Tweening;
 
 public class UrgeBody : MonoBehaviour, IPoolObject
 {
@@ -30,7 +30,8 @@ public class UrgeBody : MonoBehaviour, IPoolObject
     public float forceMagnitude = 10f;  
     public int rayCount = 36;           
     float initGraphicScale;
-  
+
+    int bombCheckFrameRate = 0;
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -42,6 +43,11 @@ public class UrgeBody : MonoBehaviour, IPoolObject
         private void OnEnable()
     {
         UpdateUrge();
+        if (isBomb)
+        {
+            bombCheckFrameRate = Random.Range(3, 9);
+           
+        }
     }
     [Button]
     public void SolveThisBall()
@@ -104,9 +110,20 @@ public class UrgeBody : MonoBehaviour, IPoolObject
         {
             if(isHovering)
                 OutlineAndSolve();
+        }
 
+        if(isBomb && Time.frameCount % bombCheckFrameRate ==0) 
+        {
+            Collider2D[] hitResults = Physics2D.OverlapCircleAll(transform.position, triggerRadius);
+            for (int j = 0; j < hitResults.Length; j++)
+            {
+                Collider2D collider = hitResults[j];
 
-          
+                if (collider.CompareTag("Ball") && collider.gameObject != gameObject && collider.GetComponent<UrgeBody>().currentUrge == currentUrge && currentUrge >= -2)
+                {
+                    UrgeManager.Instance.MergeSequence(collider, transform,currentUrge);
+                }
+            }
         }
 #if UNITY_EDITOR
         rayDirections = CalculateRayDirections();
@@ -116,6 +133,7 @@ public class UrgeBody : MonoBehaviour, IPoolObject
 #endif
     }
 
+   
 
     public void ApplyRandomForce() 
     {

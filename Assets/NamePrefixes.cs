@@ -13,7 +13,7 @@ public class NamePrefixes : MonoBehaviour
                                              "Freak", "Inferno", "Jinx", "Killer", "Matrix", "Ninja", "Outlaw",
                                              "Phantom", "Shadow", "Thunder", "X-factor", "Zero-G", "Boss",
                                              "Twilight", "Psycho","Prime", "Max","Tech", "Robot","Pro", "Genius", "Legend", "Titan","Hunter",
-                                             "Master", "Wizard", "Champion", "King", "Queen", "Lord", "Queen", "Guru"};
+                                             "Master", "Wizard", "Champion", "King", "Ruler", "Lord", "Guru"};
 
     public static readonly string[] suffixes = { "Neo", "Tech", "Bot", "X", "Legend", "Oracle",
                                                  "Sorcerer", "Warrior", "Pioneer", "Explorer", "Voyager", "Pilot", "Navigator", "Adventurer", "Seeker",
