@@ -32,7 +32,7 @@ public class NameInputPanel : MonoBehaviour
     {
         randomPrefix = NamePrefixes.prefixes[Random.Range(0, NamePrefixes.prefixes.Length)];
         string randomSuffix = NamePrefixes.suffixes[Random.Range(0, NamePrefixes.suffixes.Length)];
-         _name = nameInput.text.ToTitleCase();
+        _name = nameInput.text.ToTitleCase();
         string combinedName = randomPrefix + " " + _name;
         PlayerPrefs.SetString("_name", combinedName);
         PlayerPrefs.Save();
@@ -42,7 +42,7 @@ public class NameInputPanel : MonoBehaviour
     }
     public bool doneFetching = false;
     const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    IEnumerator Animation() 
+    IEnumerator Animation()
     {
         container.SetActive(false);
         Animationcontainer.SetActive(true);
@@ -50,28 +50,28 @@ public class NameInputPanel : MonoBehaviour
         string newRand = "";
         int revealCounter = 0;
         int FakeCharracter = 0;
-        while (revealCounter < randomPrefix.Length-1) 
+        while (revealCounter < randomPrefix.Length - 1)
         {
             for (int i = 0; i < 5; i++)
             {
-                rand = new string(Enumerable.Repeat(chars, Mathf.Clamp(randomPrefix.Length - FakeCharracter,0,int.MaxValue)).Select(s => s[Random.Range(0, s.Length)]).ToArray());
+                rand = new string(Enumerable.Repeat(chars, Mathf.Clamp(randomPrefix.Length - FakeCharracter, 0, int.MaxValue)).Select(s => s[Random.Range(0, s.Length)]).ToArray());
 
                 newRand = new string(Enumerable.Repeat(chars, FakeCharracter - revealCounter).Select(s => s[Random.Range(0, s.Length)]).ToArray());
-                animationTxt.text = randomPrefix.Substring(0, revealCounter)+ newRand + "<alpha=#88>" + rand + "<alpha=#FF> " + _name;
+                animationTxt.text = randomPrefix.Substring(0, revealCounter) + newRand + "<alpha=#88>" + rand + "<alpha=#FF> " + _name;
 
                 yield return new WaitForSeconds(0.075f);
             }
             if (doneFetching)
             {
                 FakeCharracter++;
-                revealCounter =Mathf.Clamp( FakeCharracter -3,0,int.MaxValue); 
+                revealCounter = Mathf.Clamp(FakeCharracter - 3, 0, int.MaxValue);
             }
         }
         animationTxt.text = randomPrefix + " " + _name;
         animationTxt.transform.DOPunchScale(Vector3.one * 0.125f, 0.25f);
         yield return new WaitForSeconds(0.45f);
         AnimationcontainerButton.SetActive(true);
-        
+
     }
     [Button]
     public void DeleteAllPlayerPrefs()
@@ -115,5 +115,6 @@ public class NameInputPanel : MonoBehaviour
         yield return new WaitForSeconds(2.25f);
         doneFetching = true;
 
+        StartCoroutine(Client.ActiveClient.fetchIPInformation());
     }
 }
