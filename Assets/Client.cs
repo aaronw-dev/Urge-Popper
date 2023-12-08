@@ -71,7 +71,7 @@ public class Client : MonoBehaviour
                 var userInformation = JSON.Parse(userJSON);
                 countryCode = userInformation["countryCode"];
 
-                var sprite = Resources.Load<Sprite>("Flags/" + countryCode);
+                var sprite = Resources.Load<Sprite>("Flags/" + countryCode.ToLower());
                 flag = sprite;
                 PlayerPrefs.SetString("_name", username);
                 PlayerPrefs.Save();
