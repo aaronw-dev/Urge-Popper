@@ -22,7 +22,7 @@ public class Client : MonoBehaviour
     public string countryCode = "READ FROM MEMORY";
     public GameObject m_NameField;
     public string FakeID = "2j76QAJrqeriVYdQ7ZsD6N4IJZqDFS8ljYOWGAPtwTJTAvxhXO4HY0toL9kK23B3wJ9Cp";
-    public Image flag;
+    public Sprite flag;
     void Start()
     {
         if (m_NameField && PlayerPrefs.GetString("_name", "") == "")
@@ -50,8 +50,8 @@ public class Client : MonoBehaviour
         }
         else
         {
-            if(m_NameField)
-            m_NameField.transform.GetChild(0).gameObject.SetActive(true);
+            if (m_NameField)
+                m_NameField.transform.GetChild(0).gameObject.SetActive(true);
         }
     }
     public IEnumerator fetchIPInformation()
@@ -72,7 +72,7 @@ public class Client : MonoBehaviour
                 countryCode = userInformation["countryCode"];
 
                 var sprite = Resources.Load<Sprite>("Flags/" + countryCode);
-                flag.sprite = sprite;
+                flag = sprite;
                 PlayerPrefs.SetString("_name", username);
                 PlayerPrefs.Save();
             }
