@@ -23,6 +23,7 @@ public class Client : MonoBehaviour
     public GameObject m_NameField;
     public string FakeID = "2j76QAJrqeriVYdQ7ZsD6N4IJZqDFS8ljYOWGAPtwTJTAvxhXO4HY0toL9kK23B3wJ9Cp";
     public Sprite flag;
+    public Image testImage;
     void Start()
     {
         if (m_NameField && PlayerPrefs.GetString("_name", "") == "")
@@ -73,6 +74,7 @@ public class Client : MonoBehaviour
 
                 var sprite = Resources.Load<Sprite>("Flags/" + countryCode.ToLower());
                 flag = sprite;
+                testImage.sprite = flag;
                 PlayerPrefs.SetString("_name", username);
                 PlayerPrefs.Save();
             }
