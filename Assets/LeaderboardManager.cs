@@ -68,6 +68,7 @@ public class LeaderboardManager : MonoBehaviour
                     playerScoreObj.transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = (i + 1).ToString();
                     playerScoreObj.transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = playerDataList[i].username;
                     playerScoreObj.transform.GetChild(2).GetComponent<TMPro.TextMeshProUGUI>().text = playerDataList[i].highScore.ToString();
+                    playerScoreObj.transform.GetChild(4).GetComponent<TMPro.TextMeshProUGUI>().text = playerDataList[i].highScore.ToString();
                     if (i <= 2)
                     {
                         playerScoreObj.transform.GetChild(3).GetChild(i).gameObject.SetActive(true);
