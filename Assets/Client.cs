@@ -25,7 +25,7 @@ public class Client : MonoBehaviour
     [ReadOnly]
     public bool isNewUser = true;
     public GameObject m_NameField;
-    public string FakeID = "2j76QAJrqeriVYdQ7ZsD6N4IJZqDFS8ljYOWGAPtwTJTAvxhXO4HY0toL9kK23B3wJ9Cp";
+    public string FakeID;
     [ReadOnly]
     public Sprite flag;
     void Start()
