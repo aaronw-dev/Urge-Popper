@@ -11,12 +11,14 @@ public class PlayerData
     public int highScore;
     public int recentScore;
     public string username;
+    public string countryCode;
+    public Sprite flag;
 }
 
 public class LeaderboardManager : MonoBehaviour
 {
     public List<PlayerData> playerDataList = new List<PlayerData>();
-    public List<PlayerData> leagueplayerDataList = new List<PlayerData>();
+    public List<PlayerData> leaguePlayerDataList = new List<PlayerData>();
     string apiUrl = "https://big-balls-leaderboard.aw-dev.repl.co/leaderboard/";
     public Transform Container;
     public Transform LeagueContainer;
@@ -55,11 +57,15 @@ public class LeaderboardManager : MonoBehaviour
                 var playerDataDict = JSON.Parse(jsonString);
                 foreach (var kvp in playerDataDict)
                 {
-                    PlayerData playerData = new PlayerData();
-                    playerData.highScore = kvp.Value["highScore"];
-                    playerData.recentScore = kvp.Value["recentScore"];
-                    playerData.username = kvp.Value["username"];
-                    playerData.playerId = kvp.Key;
+                    PlayerData playerData = new()
+                    {
+                        highScore = kvp.Value["highScore"],
+                        recentScore = kvp.Value["recentScore"],
+                        username = kvp.Value["username"],
+                        playerId = kvp.Key,
+                        countryCode = kvp.Value["country"]
+                    };
+                    playerData.flag = Resources.Load<Sprite>("Flags/" + playerData.countryCode.ToLower());
                     playerDataList.Add(playerData);
                 }
                 playerDataList.Sort((a, b) => b.highScore.CompareTo(a.highScore));
@@ -69,7 +75,7 @@ public class LeaderboardManager : MonoBehaviour
                     playerScoreObj.transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = (i + 1).ToString();
                     playerScoreObj.transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = playerDataList[i].username;
                     playerScoreObj.transform.GetChild(2).GetComponent<TMPro.TextMeshProUGUI>().text = playerDataList[i].highScore.ToString();
-                    playerScoreObj.transform.GetChild(4).GetComponent<Image>().sprite = Client.ActiveClient.flag;
+                    playerScoreObj.transform.GetChild(4).GetComponent<Image>().sprite = playerDataList[i].flag;
                     if (i <= 2)
                     {
                         playerScoreObj.transform.GetChild(3).GetChild(i).gameObject.SetActive(true);
@@ -100,26 +106,30 @@ public class LeaderboardManager : MonoBehaviour
                 var playerDataDict = JSON.Parse(jsonString);
                 foreach (var kvp in playerDataDict)
                 {
-                    PlayerData playerData = new PlayerData();
-                    playerData.highScore = kvp.Value["highScore"];
-                    playerData.recentScore = kvp.Value["recentScore"];
-                    playerData.username = kvp.Value["username"];
-                    playerData.playerId = kvp.Key;
-                    leagueplayerDataList.Add(playerData);
+                    PlayerData playerData = new()
+                    {
+                        highScore = kvp.Value["highScore"],
+                        recentScore = kvp.Value["recentScore"],
+                        username = kvp.Value["username"],
+                        playerId = kvp.Key,
+                        countryCode = kvp.Value["country"]
+                    };
+                    playerData.flag = Resources.Load<Sprite>("Flags/" + playerData.countryCode.ToLower());
+                    leaguePlayerDataList.Add(playerData);
                 }
-                leagueplayerDataList.Sort((a, b) => b.highScore.CompareTo(a.highScore));
-                for (int i = 0; i < leagueplayerDataList.Count; i++)
+                leaguePlayerDataList.Sort((a, b) => b.highScore.CompareTo(a.highScore));
+                for (int i = 0; i < leaguePlayerDataList.Count; i++)
                 {
                     GameObject playerScoreObj = Instantiate(PlayerScorePrefab, LeagueContainer);
                     playerScoreObj.transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = (i + 1).ToString();
-                    playerScoreObj.transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = leagueplayerDataList[i].username;
-                    playerScoreObj.transform.GetChild(2).GetComponent<TMPro.TextMeshProUGUI>().text = leagueplayerDataList[i].highScore.ToString();
-                    playerScoreObj.transform.GetChild(4).GetComponent<Image>().sprite = Client.ActiveClient.flag;
+                    playerScoreObj.transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = leaguePlayerDataList[i].username;
+                    playerScoreObj.transform.GetChild(2).GetComponent<TMPro.TextMeshProUGUI>().text = leaguePlayerDataList[i].highScore.ToString();
+                    playerScoreObj.transform.GetChild(4).GetComponent<Image>().sprite = leaguePlayerDataList[i].flag;
                     if (i <= 2)
                     {
                         playerScoreObj.transform.GetChild(3).GetChild(i).gameObject.SetActive(true);
                     }
-                    if (leagueplayerDataList[i].playerId == Client.ActiveClient.id)
+                    if (leaguePlayerDataList[i].playerId == Client.ActiveClient.id)
                     {
                         playerScoreObj.transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().color = Color.yellow;
                     }
