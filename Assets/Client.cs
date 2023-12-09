@@ -12,6 +12,8 @@ public class Client : MonoBehaviour
     private string UserInformationUrl = "https://big-balls-leaderboard.aw-dev.repl.co/users/";
     [SerializeField]
     private string UserIPUrl = "https://big-balls-leaderboard.aw-dev.repl.co/findmyip";
+    [SerializeField]
+    private string IDUrl = "https://big-balls-leaderboard.aw-dev.repl.co/getid";
     [ReadOnly]
     public string id = "READ FROM MEMORY";
     [ReadOnly]
@@ -20,15 +22,14 @@ public class Client : MonoBehaviour
     public string league = "READ FROM MEMORY";
     [ReadOnly]
     public string countryCode = "READ FROM MEMORY";
+    [ReadOnly]
+    public bool isNewUser = true;
     public GameObject m_NameField;
     public string FakeID = "2j76QAJrqeriVYdQ7ZsD6N4IJZqDFS8ljYOWGAPtwTJTAvxhXO4HY0toL9kK23B3wJ9Cp";
     [ReadOnly]
     public Sprite flag;
     void Start()
     {
-        if (m_NameField && PlayerPrefs.GetString("_name", "") == "")
-            m_NameField.SetActive(true);
-
         SetID();
     }
     void Awake()
@@ -38,6 +39,7 @@ public class Client : MonoBehaviour
     }
     void SetID()
     {
+        isNewUser = !PlayerPrefs.HasKey("_id");
         if (PlayerPrefs.HasKey("_id"))
         {
 #if UNITY_EDITOR
@@ -47,12 +49,14 @@ public class Client : MonoBehaviour
 #endif
             StartCoroutine(fetchInformation());
             if (m_NameField)
-                m_NameField.transform.GetChild(0).gameObject.SetActive(false);
+                m_NameField.SetActive(false);
         }
         else
         {
             if (m_NameField)
-                m_NameField.transform.GetChild(0).gameObject.SetActive(true);
+                m_NameField.SetActive(true);
+            StartCoroutine(getNewID());
+            StartCoroutine(fetchIPInformation());
         }
     }
     public IEnumerator fetchIPInformation()
@@ -74,14 +78,13 @@ public class Client : MonoBehaviour
 
                 var sprite = Resources.Load<Sprite>("Flags/" + countryCode.ToLower());
                 flag = sprite;
-                PlayerPrefs.SetString("_name", username);
-                PlayerPrefs.Save();
             }
         }
     }
-    public IEnumerator fetchInformation()
+    public IEnumerator getNewID()
     {
-        using (UnityWebRequest request = UnityWebRequest.Get(UserInformationUrl + id))
+        string returnedID = "";
+        using (UnityWebRequest request = UnityWebRequest.Get(IDUrl))
         {
             request.SetRequestHeader("Access-Control-Allow-Origin", "*");
             yield return request.SendWebRequest();
@@ -91,25 +94,45 @@ public class Client : MonoBehaviour
             }
             else
             {
-                string userJSON = request.downloadHandler.text;
-                var userInformation = JSON.Parse(userJSON);
-                league = userInformation["league"];
-                username = userInformation["username"];
-                countryCode = userInformation["country"];
-
-                var sprite = Resources.Load<Sprite>("Flags/" + countryCode.ToLower());
-                flag = sprite;
-                PlayerPrefs.SetString("_name", username);
-                PlayerPrefs.Save();
-                if (username == "" || league == "")
+                returnedID = request.downloadHandler.text;
+            }
+        }
+        id = returnedID;
+    }
+    public IEnumerator fetchInformation()
+    {
+        if (!isNewUser)
+        {
+            using (UnityWebRequest request = UnityWebRequest.Get(UserInformationUrl + id))
+            {
+                request.SetRequestHeader("Access-Control-Allow-Origin", "*");
+                yield return request.SendWebRequest();
+                if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
                 {
-                    if (m_NameField)
-                        m_NameField.transform.GetChild(0).gameObject.SetActive(true);
+                    Debug.LogError("Error: " + request.error);
                 }
                 else
                 {
-                    if (m_NameField)
-                        m_NameField.transform.GetChild(0).gameObject.SetActive(false);
+                    string userJSON = request.downloadHandler.text;
+                    var userInformation = JSON.Parse(userJSON);
+                    league = userInformation["league"];
+                    username = userInformation["username"];
+                    countryCode = userInformation["country"];
+
+                    var sprite = Resources.Load<Sprite>("Flags/" + countryCode.ToLower());
+                    flag = sprite;
+                    PlayerPrefs.SetString("_name", username);
+                    PlayerPrefs.Save();
+                    if (username == "" || league == "")
+                    {
+                        if (m_NameField)
+                            m_NameField.transform.GetChild(0).gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        if (m_NameField)
+                            m_NameField.transform.GetChild(0).gameObject.SetActive(false);
+                    }
                 }
             }
         }
