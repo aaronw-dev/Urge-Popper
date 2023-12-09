@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using SimpleJSON;
+using UnityEngine.UI;
 [System.Serializable]
 public class PlayerData
 {
@@ -68,7 +69,7 @@ public class LeaderboardManager : MonoBehaviour
                     playerScoreObj.transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = (i + 1).ToString();
                     playerScoreObj.transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = playerDataList[i].username;
                     playerScoreObj.transform.GetChild(2).GetComponent<TMPro.TextMeshProUGUI>().text = playerDataList[i].highScore.ToString();
-                    playerScoreObj.transform.GetChild(4).GetComponent<TMPro.TextMeshProUGUI>().text = playerDataList[i].highScore.ToString();
+                    playerScoreObj.transform.GetChild(4).GetComponent<Image>().sprite = Client.ActiveClient.flag;
                     if (i <= 2)
                     {
                         playerScoreObj.transform.GetChild(3).GetChild(i).gameObject.SetActive(true);
@@ -113,6 +114,7 @@ public class LeaderboardManager : MonoBehaviour
                     playerScoreObj.transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = (i + 1).ToString();
                     playerScoreObj.transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = leagueplayerDataList[i].username;
                     playerScoreObj.transform.GetChild(2).GetComponent<TMPro.TextMeshProUGUI>().text = leagueplayerDataList[i].highScore.ToString();
+                    playerScoreObj.transform.GetChild(4).GetComponent<Image>().sprite = Client.ActiveClient.flag;
                     if (i <= 2)
                     {
                         playerScoreObj.transform.GetChild(3).GetChild(i).gameObject.SetActive(true);

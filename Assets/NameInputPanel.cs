@@ -95,10 +95,12 @@ public class NameInputPanel : MonoBehaviour
                 PlayerPrefs.Save();
             }
         }
+        yield return StartCoroutine(Client.ActiveClient.fetchInformation());
         string username = Client.ActiveClient.username;
         string id = Client.ActiveClient.id;
         string league = Client.ActiveClient.league = "nutter";
-        string json = "{\"username\":\"" + username + "\", \"league\":\"" + league + "\", \"score\":" + 0 + ", \"id\":\"" + id + "\"}";
+        string json = "{\"username\":\"" + username + "\", \"league\":\"" + league + "\", \"score\":" + 0 + ", \"id\":\"" + id + "\",\"country\":\"" + Client.ActiveClient.countryCode + "\"}";
+        Debug.Log(json);
         using (UnityWebRequest request = UnityWebRequest.Post(apiUrl, json.ToString()))
         {
             request.SetRequestHeader("Content-Type", "application/json");
@@ -115,6 +117,6 @@ public class NameInputPanel : MonoBehaviour
         yield return new WaitForSeconds(2.25f);
         doneFetching = true;
 
-        StartCoroutine(Client.ActiveClient.fetchIPInformation());
+        StartCoroutine(Client.ActiveClient.fetchInformation());
     }
 }
