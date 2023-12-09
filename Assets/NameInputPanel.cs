@@ -17,8 +17,8 @@ public class NameInputPanel : MonoBehaviour
     GameObject container;
 
     [Space]
-    public GameObject Animationcontainer;
-    public GameObject AnimationcontainerButton;
+    public GameObject AnimationContainer;
+    public GameObject AnimationContainerButton;
     public TextMeshProUGUI animationTxt;
     void Start()
     {
@@ -42,32 +42,32 @@ public class NameInputPanel : MonoBehaviour
     IEnumerator Animation()
     {
         container.SetActive(false);
-        Animationcontainer.SetActive(true);
+        AnimationContainer.SetActive(true);
         string rand = "";
         string newRand = "";
         int revealCounter = 0;
-        int FakeCharracter = 0;
+        int FakeCharacter = 0;
         while (revealCounter < randomPrefix.Length - 1)
         {
             for (int i = 0; i < 5; i++)
             {
-                rand = new string(Enumerable.Repeat(chars, Mathf.Clamp(randomPrefix.Length - FakeCharracter, 0, int.MaxValue)).Select(s => s[Random.Range(0, s.Length)]).ToArray());
+                rand = new string(Enumerable.Repeat(chars, Mathf.Clamp(randomPrefix.Length - FakeCharacter, 0, int.MaxValue)).Select(s => s[Random.Range(0, s.Length)]).ToArray());
 
-                newRand = new string(Enumerable.Repeat(chars, FakeCharracter - revealCounter).Select(s => s[Random.Range(0, s.Length)]).ToArray());
+                newRand = new string(Enumerable.Repeat(chars, FakeCharacter - revealCounter).Select(s => s[Random.Range(0, s.Length)]).ToArray());
                 animationTxt.text = randomPrefix.Substring(0, revealCounter) + newRand + "<alpha=#88>" + rand + "<alpha=#FF> " + _name;
 
                 yield return new WaitForSeconds(0.075f);
             }
             if (doneFetching)
             {
-                FakeCharracter++;
-                revealCounter = Mathf.Clamp(FakeCharracter - 3, 0, int.MaxValue);
+                FakeCharacter++;
+                revealCounter = Mathf.Clamp(FakeCharacter - 3, 0, int.MaxValue);
             }
         }
         animationTxt.text = randomPrefix + " " + _name;
         animationTxt.transform.DOPunchScale(Vector3.one * 0.125f, 0.25f);
         yield return new WaitForSeconds(0.45f);
-        AnimationcontainerButton.SetActive(true);
+        AnimationContainerButton.SetActive(true);
 
     }
     [Button]
