@@ -55,7 +55,8 @@ public class ScoreManager : MonoBehaviour
         string username = Client.ActiveClient.username;
         string id = Client.ActiveClient.id;
         string league = Client.ActiveClient.league;
-        string json = "{\"username\":\"" + username + "\", \"league\":\"" + league + "\", \"score\":" + score + ", \"id\":\"" + id + "\"}";
+        string countryCode = Client.ActiveClient.countryCode;
+        string json = "{\"username\":\"" + username + "\", \"league\":\"" + league + "\", \"score\":" + score + ", \"id\":\"" + id + "\",\"country\":\"" + countryCode + "\"}";
         using (UnityWebRequest request = UnityWebRequest.Post(apiUrl, json.ToString()))
         {
             request.SetRequestHeader("Content-Type", "application/json");
