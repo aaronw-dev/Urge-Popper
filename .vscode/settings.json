@@ -53,9 +53,11 @@
     },
     "dotnet.defaultSolution": "Saiku Clone.sln",
     "cSpell.words": [
+        "countrycode",
         "Dont",
         "Leaderboard",
         "Metaball",
-        "Rect"
+        "Rect",
+        "UGUI"
     ]
 }
