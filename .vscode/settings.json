@@ -56,8 +56,11 @@
         "countrycode",
         "Dont",
         "Leaderboard",
+        "mastervolume",
         "Metaball",
+        "musicvolume",
         "Rect",
+        "sfxvolume",
         "Tweening",
         "UGUI"
     ]
