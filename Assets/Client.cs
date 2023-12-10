@@ -56,8 +56,8 @@ public class Client : MonoBehaviour
             if (m_NameField)
                 m_NameField.SetActive(true);
             StartCoroutine(getNewID());
-            StartCoroutine(fetchIPInformation());
         }
+        StartCoroutine(fetchIPInformation());
     }
     public IEnumerator fetchIPInformation()
     {
