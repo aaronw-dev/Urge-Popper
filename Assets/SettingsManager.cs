@@ -32,6 +32,7 @@ public class SettingsManager : MonoBehaviour
     public void OnMasterVolumeChanged(float volume)
     {
         masterVolumeText.text = (Math.Round(volume, 2) * 100).ToString() + "%";
+        VolumeManager.Global.yourMom.SetFloat("masterVolume", volume.Remap(0f, 1f, -50f, 0f));
         VolumeManager.Global.masterVolume = volume;
         PlayerPrefs.SetFloat("_mastervolume", volume);
         PlayerPrefs.Save();
@@ -39,6 +40,7 @@ public class SettingsManager : MonoBehaviour
     public void OnMusicVolumeChanged(float volume)
     {
         musicVolumeText.text = (Math.Round(volume, 2) * 100).ToString() + "%";
+        VolumeManager.Global.yourMom.SetFloat("musicVolume", volume.Remap(0f, 1f, -50f, 0f));
         VolumeManager.Global.musicVolume = volume;
         PlayerPrefs.SetFloat("_musicvolume", volume);
         PlayerPrefs.Save();
@@ -46,6 +48,7 @@ public class SettingsManager : MonoBehaviour
     public void OnSFXVolumeChanged(float volume)
     {
         SFXVolumeText.text = (Math.Round(volume, 2) * 100).ToString() + "%";
+        VolumeManager.Global.yourMom.SetFloat("sfxVolume", volume.Remap(0f, 1f, -50f, 0f));
         VolumeManager.Global.SFXVolume = volume;
         PlayerPrefs.SetFloat("_sfxvolume", volume);
         PlayerPrefs.Save();

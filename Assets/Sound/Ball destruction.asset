@@ -20,5 +20,5 @@ MonoBehaviour:
   pitchShift: 1
   pitchShiftValue: 0.1
   pitchShiftCooldown: 1
-  audioMixer: {fileID: 0}
+  audioMixer: {fileID: 2647328839504576329, guid: 42c8d9e9e5a030d40ac1b755d271c9b8, type: 2}
   playIndex: 0

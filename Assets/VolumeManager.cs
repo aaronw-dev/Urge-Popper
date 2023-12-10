@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class VolumeManager : MonoBehaviour
 {
     public static VolumeManager Global;
+    public AudioMixer yourMom;
 
     [ReadOnly]
     [Range(0, 1)]
