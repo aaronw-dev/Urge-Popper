@@ -39,6 +39,7 @@ public class Client : MonoBehaviour
     }
     void SetID()
     {
+        StartCoroutine(fetchIPInformation());
         isNewUser = !PlayerPrefs.HasKey("_id");
         if (PlayerPrefs.HasKey("_id"))
         {
@@ -57,7 +58,6 @@ public class Client : MonoBehaviour
                 m_NameField.SetActive(true);
             StartCoroutine(getNewID());
         }
-        StartCoroutine(fetchIPInformation());
     }
     public IEnumerator fetchIPInformation()
     {
