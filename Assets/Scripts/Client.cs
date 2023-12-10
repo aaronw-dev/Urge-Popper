@@ -39,6 +39,7 @@ public class Client : MonoBehaviour
     }
     void SetID()
     {
+        //test change
         StartCoroutine(fetchIPInformation());
         isNewUser = !PlayerPrefs.HasKey("_id");
         if (PlayerPrefs.HasKey("_id"))
