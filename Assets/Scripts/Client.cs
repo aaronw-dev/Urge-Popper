@@ -72,7 +72,6 @@ public class Client : MonoBehaviour
             else
             {
                 string userJSON = request.downloadHandler.text;
-                Debug.Log(userJSON);
                 var userInformation = JSON.Parse(userJSON);
                 countryCode = userInformation["countryCode"];
 
