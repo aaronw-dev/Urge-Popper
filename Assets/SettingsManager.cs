@@ -18,9 +18,15 @@ public class SettingsManager : MonoBehaviour
     public bool isMenuOpen;
     private void Start()
     {
-        masterVolumeSlider.value = VolumeManager.Global.masterVolume = PlayerPrefs.GetFloat("_mastervolume");
-        musicVolumeSlider.value = VolumeManager.Global.musicVolume = PlayerPrefs.GetFloat("_musicvolume");
-        SFXVolumeSlider.value = VolumeManager.Global.SFXVolume = PlayerPrefs.GetFloat("_sfxvolume");
+        float masterVolume = PlayerPrefs.GetFloat("_mastervolume");
+        float musicVolume = PlayerPrefs.GetFloat("_musicvolume");
+        float sfxVolume = PlayerPrefs.GetFloat("_sfxvolume");
+        masterVolumeSlider.value = masterVolume;
+        VolumeManager.Global.masterVolume = masterVolume;
+        musicVolumeSlider.value = musicVolume;
+        VolumeManager.Global.musicVolume = musicVolume;
+        SFXVolumeSlider.value = sfxVolume;
+        VolumeManager.Global.SFXVolume = sfxVolume;
     }
 
     public void OnMasterVolumeChanged(float volume)
@@ -32,14 +38,14 @@ public class SettingsManager : MonoBehaviour
     }
     public void OnMusicVolumeChanged(float volume)
     {
-        musicVolumeText.text = volume.ToString();
+        musicVolumeText.text = (Math.Round(volume, 2) * 100).ToString() + "%";
         VolumeManager.Global.musicVolume = volume;
         PlayerPrefs.SetFloat("_musicvolume", volume);
         PlayerPrefs.Save();
     }
     public void OnSFXVolumeChanged(float volume)
     {
-        SFXVolumeText.text = volume.ToString();
+        SFXVolumeText.text = (Math.Round(volume, 2) * 100).ToString() + "%";
         VolumeManager.Global.SFXVolume = volume;
         PlayerPrefs.SetFloat("_sfxvolume", volume);
         PlayerPrefs.Save();
