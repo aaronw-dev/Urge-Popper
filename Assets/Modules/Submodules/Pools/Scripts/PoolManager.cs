@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-
+using NaughtyAttributes;
 namespace Redcode.Pools
 {
     [Serializable]
@@ -48,6 +48,17 @@ namespace Redcode.Pools
         private List<PoolData> _pools;
 
         private readonly List<IPool<Component>> _poolsObjects = new();
+
+
+        private List<string> StringValues { get { return _pools.Select(x => x.Name).ToList(); } }
+        [SerializeField, Dropdown("StringValues"), Space]
+        private string _poolToSpawn;
+
+        [Button]
+        public void Spawn()
+        {
+            GetFromPool<Transform>(_poolToSpawn).transform.position = Vector3.zero;
+        }
 
         private void Awake()
         {

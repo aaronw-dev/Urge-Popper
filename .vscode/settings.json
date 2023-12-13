@@ -51,7 +51,7 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Saiku Clone.sln",
+    "dotnet.defaultSolution": "Urge-Popper.sln",
     "cSpell.words": [
         "countrycode",
         "Dont",

@@ -125,7 +125,7 @@ public class UrgeManager : MonoBehaviour
                 Collider2D collider = hitResults[j];
                 if (collider.CompareTag("Ball") && collider.gameObject != gameObject)
                 {
-                    AddExplosionForce(collider.attachedRigidbody, 100, middleDistance, newBomb.GetComponent<UrgeBody>().bombMergeRadius, mode: ForceMode2D.Impulse);
+                    AddExplosionForce(collider.attachedRigidbody, 200, middleDistance, newBomb.GetComponent<UrgeBody>().bombMergeRadius, mode: ForceMode2D.Impulse);
                 }
             }
         });

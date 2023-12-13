@@ -3663,8 +3663,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameInput: {fileID: 1342225939}
-  AnimationContainer: {fileID: 0}
-  AnimationContainerButton: {fileID: 0}
+  AnimationContainer: {fileID: 2057305285}
+  AnimationContainerButton: {fileID: 352329014}
   animationTxt: {fileID: 2085235914}
   doneFetching: 0
 --- !u!1 &1059546248
