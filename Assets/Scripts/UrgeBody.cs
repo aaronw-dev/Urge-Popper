@@ -25,6 +25,8 @@ public class UrgeBody : MonoBehaviour, IPoolObject
 
     [Header("Feedback")]
     public UnityEvent OnBeginDestroy;
+    public UnityEvent OnDestroy;
+
     public MMFeedbacks DestroyFeedback;
 
     public float delayBeforeDestroy = 0f;
@@ -294,6 +296,7 @@ public class UrgeBody : MonoBehaviour, IPoolObject
         }
         SolveThisBall();
         OnBeginDestroy?.Invoke();
+        OnDestroy?.Invoke();
         if (contactedObjects.Count < 3 && !isBomb)
             return;
         for (int i = 0; i < contactedObjects.Count; i++)
